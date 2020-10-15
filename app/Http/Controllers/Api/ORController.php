@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order_receipt;
+use Illuminate\Support\Facades\DB;
 
 class ORController extends Controller
 {
@@ -15,7 +16,13 @@ class ORController extends Controller
      */
     public function index()
     {
-        $brand = Order_receipt::all();
+        //$brand = Order_receipt::all();
+        $brand = DB::table('detail_order')
+                ->join('order_receipt','order_receipt.id','=','detail_order.idReceipt')
+                ->join('product','product.id','=','detail_order.idProduct')
+                ->join('user','user.id','=','order_receipt.idUser')
+                ->join('order_status','order_status.id','=','order_receipt.idStatus')
+                ->get();
         return response()->json($brand);
     }
 

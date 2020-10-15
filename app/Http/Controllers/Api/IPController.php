@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\IP;
 
@@ -15,8 +16,13 @@ class IPController extends Controller
      */
     public function index()
     {
-        $brand = IP::all();
-        return response()->json($brand);
+        //$brand = IP::all();
+        $data = DB::table('detail_import_product')
+                ->join('import_product','import_product.id','=','detail_import_product.idReceipt')
+                ->join('product','product.id','=','detail_import_product.idProduct')
+                ->join('provider','provider.id','=','import_product.id')
+                ->get();
+        return response()->json($data);
     }
 
     /**

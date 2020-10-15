@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Users;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -15,7 +16,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $brand = Users::all();
+        //$brand = Users::all();
+        $brand = DB::table('user')
+                ->join('role','role.id','=','user.idUserRole')
+                ->join('user_permission','user_permission.idUser','=','user.id')
+                ->get();
         return response()->json($brand);
     }
 
