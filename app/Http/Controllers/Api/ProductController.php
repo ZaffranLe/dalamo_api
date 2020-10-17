@@ -18,10 +18,10 @@ class ProductController extends Controller
     {
         //$brand = Product::all();
         $brand = DB::table('product')
-                ->join('property','property.idProduct','=','product.id')
+                ->join('property','product.id','=','property.idProduct')
                 ->join('brand','brand.id','=','product.idBrand')
                 ->join('product_category','product_category.idProduct','=','product.id')
-                ->join('category','category.id','=','product_category.idCategory')
+                ->join('category','product_category.idCategory','=','category.id')
                 ->get();
         return response()->json($brand);
     }
@@ -64,7 +64,9 @@ class ProductController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'isDeleted' => $request->get('isDeleted'),
+            'isHot'=>$request->get('isHot'),
+            'isNew'=>$request->get('isNew')
         ]);
         $brand->save();
         return response()->json('Add Product Successfully.');
@@ -123,6 +125,8 @@ class ProductController extends Controller
         $brand->deletedBy = $request->get('deletedBy');
         $brand->deletedDate = $request->get('deletedDate');
         $brand->isDeleted = $request->get('isDeleted');
+        $brand->isDeleted = $request->get('isHot');
+        $brand->isDeleted = $request->get('isNew');
         $brand->save();
          return response()->json('Product Update Successfully');
     }

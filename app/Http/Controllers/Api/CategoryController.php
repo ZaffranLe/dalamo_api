@@ -38,7 +38,6 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $brand = new Category([
-        	'idCategory' => $request->get('idCategory'),
             'slug' => $request->get('slug'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
@@ -86,7 +85,6 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $brand = Category::find($id);
-        $brand->idCategory = $request->get('idCategory');
         $brand->slug = $request->get('slug');
         $brand->createdBy = $request->get('createdBy');
         $brand->createdDate = $request->get('createdDate');
