@@ -22,6 +22,9 @@ class ProductController extends Controller
                 ->leftJoin('brand','brand.id','=','product.idBrand')
                 ->leftJoin('product_category','product_category.idProduct','=','product.id')
                 ->leftJoin('category','product_category.idCategory','=','category.id')
+                ->selectRaw('product.*')
+                ->selectRaw('brand.name as brandName')
+                ->selectRaw('category.name as categoryName')
                 ->get();
         return response()->json($brand);
     }
