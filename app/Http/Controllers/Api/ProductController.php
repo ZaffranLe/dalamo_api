@@ -18,10 +18,10 @@ class ProductController extends Controller
     {
         //$brand = Product::all();
         $brand = DB::table('product')
-                ->join('property','product.id','=','property.idProduct')
-                ->join('brand','brand.id','=','product.idBrand')
-                ->join('product_category','product_category.idProduct','=','product.id')
-                ->join('category','product_category.idCategory','=','category.id')
+                // ->leftJoin('property','product.id','=','property.idProduct')
+                ->leftJoin('brand','brand.id','=','product.idBrand')
+                ->leftJoin('product_category','product_category.idProduct','=','product.id')
+                ->leftJoin('category','product_category.idCategory','=','category.id')
                 ->get();
         return response()->json($brand);
     }
