@@ -15,8 +15,8 @@ class PCController extends Controller
      */
     public function index()
     {
-        $brand = PC::all();
-        return response()->json($brand);
+        $product_category = PC::all();
+        return response()->json($product_category);
     }
 
     /**
@@ -37,11 +37,11 @@ class PCController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new PC([
+        $product_category = new PC([
             'idCategory' => $request->get('idCategory'),
             'idProduct' => $request->get('idProduct')
         ]);
-        $brand->save();
+        $product_category->save();
         return response()->json('Add Product category Successfully.');
     }
 
@@ -53,8 +53,8 @@ class PCController extends Controller
      */
     public function show($id)
     {
-        $brand = PC::find($id);
-        return response()->json($brand);
+        $product_category = PC::find($id);
+        return response()->json($product_category);
     }
 
     /**
@@ -77,10 +77,10 @@ class PCController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = PC::find($id);
-        $brand->idCategory = $request->get('idCategory');
-        $brand->idProduct = $request->get('idProduct');
-        $brand->save();
+        $product_category = PC::find($id);
+        $product_category->idCategory = $request->get('idCategory');
+        $product_category->idProduct = $request->get('idProduct');
+        $product_category->save();
          return response()->json('Product category Update Successfully');
     }
 
@@ -92,8 +92,8 @@ class PCController extends Controller
      */
     public function destroy($id)
     {
-        $brand = PC::find($id);
-        $brand->delete();
+        $product_category = PC::find($id);
+        $product_category->delete();
         return response()->json('Product category Deleted Successfully');
     }
 }

@@ -17,10 +17,10 @@ class IPController extends Controller
     public function index()
     {
         //$brand = IP::all();
-        $data = DB::table('detail_import_product')
-                ->join('import_product','import_product.id','=','detail_import_product.idReceipt')
-                ->join('product','product.id','=','detail_import_product.idProduct')
+        $data = DB::table('import_product')
+                ->join('detail_import_product','import_product.id','=','detail_import_product.idReceipt')
                 ->join('provider','provider.id','=','import_product.id')
+                ->select('import_product.id','import_product.importDate','provider.name as providerName','detail_import_product.quantity as totalPrice')
                 ->get();
         return response()->json($data);
     }
@@ -43,7 +43,7 @@ class IPController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new IP([
+        $ip = new IP([
             'idProvider' => $request->get('idProvider'),
             'importDate' => $request->get('importDate'),
             'createdBy' => $request->get('createdBy'),
@@ -54,7 +54,7 @@ class IPController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $ip->save();
         return response()->json('Add Import product Successfully.');
     }
 
@@ -66,8 +66,8 @@ class IPController extends Controller
      */
     public function show($id)
     {
-        $brand = IP::find($id);
-        return response()->json($brand);
+        $ip = IP::find($id);
+        return response()->json($ip);
     }
 
     /**
@@ -90,17 +90,17 @@ class IPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = IP::find($id);
-        $brand->idProvider = $request->get('idProvider');
-        $brand->importDate = $request->get('importDate');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $ip = IP::find($id);
+        $ip->idProvider = $request->get('idProvider');
+        $ip->importDate = $request->get('importDate');
+        $ip->createdBy = $request->get('createdBy');
+        $ip->createdDate = $request->get('createdDate');
+        $ip->updatedBy = $request->get('updatedBy');
+        $ip->updatedDate = $request->get('updatedDate');
+        $ip->deletedBy = $request->get('deletedBy');
+        $ip->deletedDate = $request->get('deletedDate');
+        $ip->isDeleted = $request->get('isDeleted');
+        $ip->save();
          return response()->json('Import product Update Successfully');
     }
 
@@ -112,8 +112,8 @@ class IPController extends Controller
      */
     public function destroy($id)
     {
-        $brand = IP::find($id);
-        $brand->delete();
+        $ip = IP::find($id);
+        $ip->delete();
         return response()->json('Import product Deleted Successfully');
     }
 }

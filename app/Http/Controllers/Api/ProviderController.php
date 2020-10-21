@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Provider;
+use Illuminate\Support\Facades\DB;
 
 class ProviderController extends Controller
 {
@@ -15,8 +16,11 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        $brand = Provider::all();
-        return response()->json($brand);
+        $provider = DB::table('provider')
+        ->select('id','name','email','address','description','phone')
+        ->where('isDeleted','=',0)
+        ->get();
+        return response()->json($provider);
     }
 
     /**
@@ -37,7 +41,7 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Provider([
+        $provider = new Provider([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'address' => $request->get('address'),
@@ -51,7 +55,7 @@ class ProviderController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $provider->save();
         return response()->json('Add Provider Successfully.');
     }
 
@@ -63,8 +67,11 @@ class ProviderController extends Controller
      */
     public function show($id)
     {
-        $brand = Provider::find($id);
-        return response()->json($brand);
+        $provider = DB::table('provider')
+        ->select('id','name','email','address','description','phone')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($provider);
     }
 
     /**
@@ -87,20 +94,20 @@ class ProviderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Provider::find($id);
-        $brand->name = $request->get('name');
-        $brand->email = $request->get('email');
-        $brand->address = $request->get('address');
-        $brand->description = $request->get('description');
-        $brand->phone = $request->get('phone');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $provider = Provider::find($id);
+        $provider->name = $request->get('name');
+        $provider->email = $request->get('email');
+        $provider->address = $request->get('address');
+        $provider->description = $request->get('description');
+        $provider->phone = $request->get('phone');
+        $provider->createdBy = $request->get('createdBy');
+        $provider->createdDate = $request->get('createdDate');
+        $provider->updatedBy = $request->get('updatedBy');
+        $provider->updatedDate = $request->get('updatedDate');
+        $provider->deletedBy = $request->get('deletedBy');
+        $provider->deletedDate = $request->get('deletedDate');
+        $provider->isDeleted = $request->get('isDeleted');
+        $provider->save();
          return response()->json('Provider Update Successfully');
     }
 
@@ -112,8 +119,8 @@ class ProviderController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Provider::find($id);
-        $brand->delete();
+        $provider = Provider::find($id);
+        $provider->delete();
         return response()->json('Provider Deleted Successfully');
     }
 }
