@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
@@ -15,8 +16,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $brand = Permission::all();
-        return response()->json($brand);
+        $permission = DB::table('permission')
+        ->select('id','name','description')
+        ->where('isDeleted','=',0)
+        ->get();
+        return response()->json($permission);
     }
 
     /**
@@ -37,7 +41,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Permission([
+        $permission = new Permission([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'createdBy' => $request->get('createdBy'),
@@ -48,7 +52,7 @@ class PermissionController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $permission->save();
         return response()->json('Add Permission Successfully.');
     }
 
@@ -60,8 +64,11 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $brand = Permission::find($id);
-        return response()->json($brand);
+        $permission = DB::table('permission')
+        ->select('id','name','description')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($permission);
     }
 
     /**
@@ -84,17 +91,17 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Permission::find($id);
-        $brand->name = $request->get('name');
-        $brand->description = $request->get('description');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $permission = Permission::find($id);
+        $permission->name = $request->get('name');
+        $permission->description = $request->get('description');
+        $permission->createdBy = $request->get('createdBy');
+        $permission->createdDate = $request->get('createdDate');
+        $permission->updatedBy = $request->get('updatedBy');
+        $permission->updatedDate = $request->get('updatedDate');
+        $permission->deletedBy = $request->get('deletedBy');
+        $permission->deletedDate = $request->get('deletedDate');
+        $permission->isDeleted = $request->get('isDeleted');
+        $permission->save();
          return response()->json('Permission Update Successfully');
     }
 
@@ -106,8 +113,8 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Permission::find($id);
-        $brand->delete();
+        $permission = Permission::find($id);
+        $permission->delete();
         return response()->json('Permission Deleted Successfully');
     }
 }

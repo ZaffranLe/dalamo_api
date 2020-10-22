@@ -15,8 +15,8 @@ class DIPController extends Controller
      */
     public function index()
     {
-        $brand = DIP::all();
-        return response()->json($brand);
+        $dip = DIP::all();
+        return response()->json($dip);
     }
 
     /**
@@ -37,12 +37,12 @@ class DIPController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new DIP([
+        $dip = new DIP([
             'idReceipt' => $request->get('idReceipt'),
             'idProduct' => $request->get('idProduct'),
             'quantity' => $request->get('quantity')
         ]);
-        $brand->save();
+        $dip->save();
         return response()->json('Add detail import product Successfully.');
     }
 
@@ -54,8 +54,8 @@ class DIPController extends Controller
      */
     public function show($id)
     {
-        $brand = DIP::find($id);
-        return response()->json($brand);
+        $dip = DIP::find($id);
+        return response()->json($dip);
     }
 
     /**
@@ -78,11 +78,11 @@ class DIPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = DIP::find($id);
-        $brand->idReceipt = $request->get('idReceipt');
-        $brand->idProduct = $request->get('idProduct');
-        $brand->quantity = $request->get('quantity');
-        $brand->save();
+        $dip = DIP::find($id);
+        $dip->idReceipt = $request->get('idReceipt');
+        $dip->idProduct = $request->get('idProduct');
+        $dip->quantity = $request->get('quantity');
+        $dip->save();
          return response()->json('Detail import product Update Successfully');
     }
 
@@ -94,8 +94,8 @@ class DIPController extends Controller
      */
     public function destroy($id)
     {
-        $brand = DIP::find($id);
-        $brand->delete();
+        $dip = DIP::find($id);
+        $dip->delete();
         return response()->json('Detail import product Deleted Successfully');
     }
 }

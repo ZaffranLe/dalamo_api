@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -15,8 +16,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $brand = Role::all();
-        return response()->json($brand);
+        $role = DB::table('role')
+        ->select('id','name','description')
+        ->where('isDeleted','=',0)
+        ->get();
+        return response()->json($role);
     }
 
     /**
@@ -37,7 +41,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Role([
+        $role = new Role([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'createdBy' => $request->get('createdBy'),
@@ -48,7 +52,7 @@ class RoleController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $role->save();
         return response()->json('Add Role Successfully.');
     }
 
@@ -60,8 +64,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $brand = Role::find($id);
-        return response()->json($brand);
+        $role = DB::table('role')
+        ->select('id','name','description')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($role);
     }
 
     /**
@@ -84,17 +91,17 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Role::find($id);
-        $brand->name = $request->get('name');
-        $brand->description = $request->get('description');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $role = Role::find($id);
+        $role->name = $request->get('name');
+        $role->description = $request->get('description');
+        $role->createdBy = $request->get('createdBy');
+        $role->createdDate = $request->get('createdDate');
+        $role->updatedBy = $request->get('updatedBy');
+        $role->updatedDate = $request->get('updatedDate');
+        $role->deletedBy = $request->get('deletedBy');
+        $role->deletedDate = $request->get('deletedDate');
+        $role->isDeleted = $request->get('isDeleted');
+        $role->save();
          return response()->json('Role Update Successfully');
     }
 
@@ -106,8 +113,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Role::find($id);
-        $brand->delete();
+        $role = Role::find($id);
+        $role->delete();
         return response()->json('Role Deleted Successfully');
     }
 }

@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         //$brand = Product::all();
-        $brand = DB::table('product')
+        $product = DB::table('product')
                 // ->leftJoin('property','product.id','=','property.idProduct')
                 ->leftJoin('brand','brand.id','=','product.idBrand')
                 ->leftJoin('product_category','product_category.idProduct','=','product.id')
@@ -25,8 +25,12 @@ class ProductController extends Controller
                 ->selectRaw('product.*')
                 ->selectRaw('brand.name as brandName')
                 ->selectRaw('category.name as categoryName')
+                ->select(DB::table('property')
+                ->select ('property.*')
+                    ->get())
+
                 ->get();
-        return response()->json($brand);
+        return response()->json($product);
     }
 
     /**
@@ -47,7 +51,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Product([
+        $product = new Product([
             'name' => $request->get('name'),
             'idBrand' => $request->get('idBrand'),
             'price' => $request->get('price'),
@@ -71,7 +75,7 @@ class ProductController extends Controller
             'isHot'=>$request->get('isHot'),
             'isNew'=>$request->get('isNew')
         ]);
-        $brand->save();
+        $product->save();
         return response()->json('Add Product Successfully.');
     }
 
@@ -83,8 +87,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $brand = Product::find($id);
-        return response()->json($brand);
+        $product = Product::find($id);
+        return response()->json($product);
     }
 
     /**
@@ -107,30 +111,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Product::find($id);
-        $brand->name = $request->get('name');
-        $brand->idBrand = $request->get('idBrand');
-        $brand->price = $request->get('price');
-        $brand->description = $request->get('description');
-        $brand->characteristic = $request->get('characteristic');
-        $brand->guide = $request->get('guide');
-        $brand->ingredient = $request->get('ingredient');
-        $brand->preservation = $request->get('preservation');
-        $brand->origin = $request->get('origin');
-        $brand->storageQuantity = $request->get('storageQuantity');
-        $brand->transportingQuantity = $request->get('transportingQuantity');
-        $brand->isDiscount = $request->get('isDiscount');
-        $brand->discountPercent = $request->get('discountPercent');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->isDeleted = $request->get('isHot');
-        $brand->isDeleted = $request->get('isNew');
-        $brand->save();
+        $product = Product::find($id);
+        $product->name = $request->get('name');
+        $product->idBrand = $request->get('idBrand');
+        $product->price = $request->get('price');
+        $product->description = $request->get('description');
+        $product->characteristic = $request->get('characteristic');
+        $product->guide = $request->get('guide');
+        $product->ingredient = $request->get('ingredient');
+        $product->preservation = $request->get('preservation');
+        $product->origin = $request->get('origin');
+        $product->storageQuantity = $request->get('storageQuantity');
+        $product->transportingQuantity = $request->get('transportingQuantity');
+        $product->isDiscount = $request->get('isDiscount');
+        $product->discountPercent = $request->get('discountPercent');
+        $product->createdBy = $request->get('createdBy');
+        $product->createdDate = $request->get('createdDate');
+        $product->updatedBy = $request->get('updatedBy');
+        $product->updatedDate = $request->get('updatedDate');
+        $product->deletedBy = $request->get('deletedBy');
+        $product->deletedDate = $request->get('deletedDate');
+        $product->isDeleted = $request->get('isDeleted');
+        $product->isDeleted = $request->get('isHot');
+        $product->isDeleted = $request->get('isNew');
+        $product->save();
          return response()->json('Product Update Successfully');
     }
 
@@ -142,8 +146,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Product::find($id);
-        $brand->delete();
+        $product = Product::find($id);
+        $product->delete();
         return response()->json('Product Deleted Successfully');
     }
 }

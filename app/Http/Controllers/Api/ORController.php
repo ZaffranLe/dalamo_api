@@ -17,13 +17,12 @@ class ORController extends Controller
     public function index()
     {
         //$brand = Order_receipt::all();
-        $brand = DB::table('detail_order')
-                ->join('order_receipt','order_receipt.id','=','detail_order.idReceipt')
-                ->join('product','product.id','=','detail_order.idProduct')
+        $order_receipt = DB::table('order_receipt')
                 ->join('user','user.id','=','order_receipt.idUser')
                 ->join('order_status','order_status.id','=','order_receipt.idStatus')
+                ->select('order_receipt.id','order_status.name as statusName','order_receipt.name','order_receipt.phone','order_receipt.address','order_receipt.note','user.fullname as userOrdered')
                 ->get();
-        return response()->json($brand);
+        return response()->json($order_receipt);
     }
 
     /**
@@ -44,7 +43,7 @@ class ORController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Order_receipt([
+        $order_receipt = new Order_receipt([
         	'idStatus' => $request->get('idStatus'),
             'name' => $request->get('name'),
             'phone' => $request->get('phone'),
@@ -59,7 +58,7 @@ class ORController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $order_receipt->save();
         return response()->json('Add Order Receipt Successfully.');
     }
 
@@ -71,8 +70,8 @@ class ORController extends Controller
      */
     public function show($id)
     {
-        $brand = Order_receipt::find($id);
-        return response()->json($brand);
+        $order_receipt = Order_receipt::find($id);
+        return response()->json($order_receipt);
     }
 
     /**
@@ -95,21 +94,21 @@ class ORController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Order_receipt::find($id);
-        $brand->idStatus = $request->get('idStatus');
-        $brand->name = $request->get('name');
-        $brand->phone = $request->get('phone');
-        $brand->address = $request->get('address');
-        $brand->note = $request->get('note');
-        $brand->idUser = $request->get('idUser');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $order_receipt = Order_receipt::find($id);
+        $order_receipt->idStatus = $request->get('idStatus');
+        $order_receipt->name = $request->get('name');
+        $order_receipt->phone = $request->get('phone');
+        $order_receipt->address = $request->get('address');
+        $order_receipt->note = $request->get('note');
+        $order_receipt->idUser = $request->get('idUser');
+        $order_receipt->createdBy = $request->get('createdBy');
+        $order_receipt->createdDate = $request->get('createdDate');
+        $order_receipt->updatedBy = $request->get('updatedBy');
+        $order_receipt->updatedDate = $request->get('updatedDate');
+        $order_receipt->deletedBy = $request->get('deletedBy');
+        $order_receipt->deletedDate = $request->get('deletedDate');
+        $order_receipt->isDeleted = $request->get('isDeleted');
+        $order_receipt->save();
          return response()->json('Order Receipt Update Successfully');
     }
 
@@ -121,8 +120,8 @@ class ORController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Order_receipt::find($id);
-        $brand->delete();
+        $order_receipt = Order_receipt::find($id);
+        $order_receipt->delete();
         return response()->json('Order Receipt Deleted Successfully');
     }
 }
