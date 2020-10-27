@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\OS;
+use Illuminate\Support\Facades\DB;
 
 class OSController extends Controller
 {
@@ -15,8 +16,12 @@ class OSController extends Controller
      */
     public function index()
     {
-        $brand = OS::all();
-        return response()->json($brand);
+        $order_status = DB::table('order_status')
+        ->select('id','name','description')
+        ->where('isDeleted','=',0)
+        ->get();
+
+        return response()->json($order_status);
     }
 
     /**
@@ -37,7 +42,7 @@ class OSController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new OS([
+        $order_status = new OS([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'createdBy' => $request->get('createdBy'),
@@ -48,7 +53,7 @@ class OSController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $order_status->save();
         return response()->json('Add Order-status Successfully.');
     }
 
@@ -60,8 +65,11 @@ class OSController extends Controller
      */
     public function show($id)
     {
-        $brand = OS::find($id);
-        return response()->json($brand);
+        $order_status = DB::table('order_status')
+        ->select('id','name','description')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($order_status);
     }
 
     /**
@@ -84,17 +92,17 @@ class OSController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = OS::find($id);
-        $brand->name = $request->get('name');
-        $brand->description = $request->get('description');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $order_status = OS::find($id);
+        $order_status->name = $request->get('name');
+        $order_status->description = $request->get('description');
+        $order_status->createdBy = $request->get('createdBy');
+        $order_status->createdDate = $request->get('createdDate');
+        $order_status->updatedBy = $request->get('updatedBy');
+        $order_status->updatedDate = $request->get('updatedDate');
+        $order_status->deletedBy = $request->get('deletedBy');
+        $order_status->deletedDate = $request->get('deletedDate');
+        $order_status->isDeleted = $request->get('isDeleted');
+        $order_status->save();
          return response()->json('Order-status Update Successfully');
     }
 
@@ -106,8 +114,8 @@ class OSController extends Controller
      */
     public function destroy($id)
     {
-        $brand = OS::find($id);
-        $brand->delete();
+        $order_status = OS::find($id);
+        $order_status->delete();
         return response()->json('Order-status Deleted Successfully');
     }
 }

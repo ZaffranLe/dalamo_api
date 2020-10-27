@@ -17,11 +17,12 @@ class UserController extends Controller
     public function index()
     {
         //$brand = Users::all();
-        $brand = DB::table('user')
-                ->join('role','role.id','=','user.idUserRole')
-                ->join('user_permission','user_permission.idUser','=','user.id')
+        $user = DB::table('user')
+                ->leftJoin('role','role.id','=','user.idUserRole')
+                ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
+                ->where('user.isDeleted','=' ,0)
                 ->get();
-        return response()->json($brand);
+        return response()->json($user);
     }
 
     /**
@@ -42,7 +43,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Users([
+        $user = new Users([
             'fullName' => $request->get('fullName'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
@@ -57,7 +58,7 @@ class UserController extends Controller
             'deletedDate' => $request->get('deletedDate'),
             'isDeleted' => $request->get('isDeleted')
         ]);
-        $brand->save();
+        $user->save();
         return response()->json('Add User Successfully.');
     }
 
@@ -69,8 +70,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $brand = Users::find($id);
-        return response()->json($brand);
+        $user = DB::table('user')
+        ->leftJoin('role','role.id','=','user.idUserRole')
+        ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
+        ->where('user.id','=' ,$id)
+        ->get();
+        return response()->json($user);
     }
 
     /**
@@ -93,21 +98,21 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Users::find($id);
-     	$brand->fullName = $request->get('fullName');
-        $brand->email = $request->get('email');
-        $brand->phone = $request->get('phone');
-        $brand->address = $request->get('address');
-        $brand->password = $request->get('password');
-        $brand->isUserRole = $request->get('isUserRole');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
+        $user = Users::find($id);
+     	$user->fullName = $request->get('fullName');
+        $user->email = $request->get('email');
+        $user->phone = $request->get('phone');
+        $user->address = $request->get('address');
+        $user->password = $request->get('password');
+        $user->isUserRole = $request->get('isUserRole');
+        $user->createdBy = $request->get('createdBy');
+        $user->createdDate = $request->get('createdDate');
+        $user->updatedBy = $request->get('updatedBy');
+        $user->updatedDate = $request->get('updatedDate');
+        $user->deletedBy = $request->get('deletedBy');
+        $user->deletedDate = $request->get('deletedDate');
+        $user->isDeleted = $request->get('isDeleted');
+        $user->save();
          return response()->json('User Update Successfully');
     }
 
@@ -119,8 +124,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Users::find($id);
-        $brand->delete();
+        $user = Users::find($id);
+        $user->delete();
         return response()->json('User Deleted Successfully');
     }
 }

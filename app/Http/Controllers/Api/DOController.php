@@ -15,8 +15,8 @@ class DOController extends Controller
      */
     public function index()
     {
-        $brand = Detail_order::all();
-        return response()->json($brand);
+        $detail_order = Detail_order::all();
+        return response()->json($detail_order);
     }
 
     /**
@@ -37,12 +37,12 @@ class DOController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Detail_order([
+        $detail_order = new Detail_order([
             'idReceipt' => $request->get('idReceipt'),
             'idProduct' => $request->get('idProduct'),
             'quantity' => $request->get('quantity')
         ]);
-        $brand->save();
+        $detail_order->save();
         return response()->json('Add detail order Successfully.');
     }
 
@@ -54,8 +54,8 @@ class DOController extends Controller
      */
     public function show($id)
     {
-        $brand = Detail_order::find($id);
-        return response()->json($brand);
+        $detail_order = Detail_order::find($id);
+        return response()->json($detail_order);
     }
 
     /**
@@ -78,11 +78,11 @@ class DOController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Detail_order::find($id);
-        $brand->idReceipt = $request->get('idReceipt');
-        $brand->idProduct = $request->get('idProduct');
-        $brand->quantity = $request->get('quantity');
-        $brand->save();
+        $detail_order = Detail_order::find($id);
+        $detail_order->idReceipt = $request->get('idReceipt');
+        $detail_order->idProduct = $request->get('idProduct');
+        $detail_order->quantity = $request->get('quantity');
+        $detail_order->save();
          return response()->json('Detail order Update Successfully');
     }
 
@@ -94,8 +94,8 @@ class DOController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Detail_order::find($id);
-        $brand->delete();
+        $detail_order = Detail_order::find($id);
+        $detail_order->delete();
         return response()->json('Detail order Deleted Successfully');
     }
 }

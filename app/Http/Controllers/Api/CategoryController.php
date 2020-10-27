@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -15,8 +16,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $brand = Category::all();
-        return response()->json($brand);
+        $category = DB::table('category')
+        ->select('id','slug','name')
+        ->where('isDeleted','=',0)
+        ->get();
+        return response()->json($category);
     }
 
     /**
@@ -37,7 +41,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Category([
+        $category = new Category([
             'slug' => $request->get('slug'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
@@ -48,7 +52,7 @@ class CategoryController extends Controller
             'isDeleted' => $request->get('isDeleted'),
             'name' => $request->get('name')
         ]);
-        $brand->save();
+        $category->save();
         return response()->json('Add Category Successfully.');
     }
 
@@ -60,8 +64,12 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $brand = Category::find($id);
-        return response()->json($brand);
+        $category = DB::table('category')
+        ->select('id','slug','name')
+        ->where('id','=',$id)
+        ->get();
+
+        return response()->json($category);
     }
 
     /**
@@ -84,17 +92,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Category::find($id);
-        $brand->slug = $request->get('slug');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->name = $request->get('name');
-        $brand->save();
+        $category = Category::find($id);
+        $category->slug = $request->get('slug');
+        $category->createdBy = $request->get('createdBy');
+        $category->createdDate = $request->get('createdDate');
+        $category->updatedBy = $request->get('updatedBy');
+        $category->updatedDate = $request->get('updatedDate');
+        $category->deletedBy = $request->get('deletedBy');
+        $category->deletedDate = $request->get('deletedDate');
+        $category->isDeleted = $request->get('isDeleted');
+        $category->name = $request->get('name');
+        $category->save();
          return response()->json('Category Update Successfully');
     }
 
@@ -106,8 +114,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Category::find($id);
-        $brand->delete();
+        $category = Category::find($id);
+        $category->delete();
         return response()->json('Category Deleted Successfully');
     }
 }

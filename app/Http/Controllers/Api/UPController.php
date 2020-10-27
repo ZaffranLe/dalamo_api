@@ -15,8 +15,8 @@ class UPController extends Controller
      */
     public function index()
     {
-        $brand = UP::all();
-        return response()->json($brand);
+        $user_permission = UP::all();
+        return response()->json($user_permission);
     }
 
     /**
@@ -37,11 +37,11 @@ class UPController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new UP([
+        $user_permission = new UP([
             'idUser' => $request->get('idUser'),
             'idPermission' => $request->get('idPermission')
         ]);
-        $brand->save();
+        $user_permission->save();
         return response()->json('Add User-permission Successfully.');
     }
 
@@ -53,8 +53,8 @@ class UPController extends Controller
      */
     public function show($id)
     {
-        $brand = UP::find($id);
-        return response()->json($brand);
+        $user_permission = UP::find($id);
+        return response()->json($user_permission);
     }
 
     /**
@@ -77,10 +77,10 @@ class UPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = UP::find($id);
-        $brand->idUser = $request->get('idUser');
-        $brand->idPermission = $request->get('idPermission');
-        $brand->save();
+        $user_permission = UP::find($id);
+        $user_permission->idUser = $request->get('idUser');
+        $user_permission->idPermission = $request->get('idPermission');
+        $user_permission->save();
          return response()->json('User-permission Update Successfully');
     }
 
@@ -92,8 +92,8 @@ class UPController extends Controller
      */
     public function destroy($id)
     {
-        $brand = UP::find($id);
-        $brand->delete();
+        $user_permission = UP::find($id);
+        $user_permission->delete();
         return response()->json('User-permission Deleted Successfully');
     }
 }

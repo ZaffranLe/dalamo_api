@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Brand;
+use App\Models\Comment;
+use Illuminate\Support\Facades\DB;
 
-class BrandController extends Controller
+class CommentController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,13 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brand = Brand::all();
-        return response()->json($brand);
+        $comment = DB::table('comment')
+            ->leftJoin('user','user.id','=','comment.idUser')
+            ->selectRaw('comment.*')
+            ->selectRaw('user.fullname as Fullname')
+            ->where('comment.isDeleted','=' ,0)
+            ->get();
+        return response()->json($comment);
     }
 
     /**
@@ -37,19 +43,19 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        $brand = new Brand([
-            'name' => $request->get('name'),
-            'imagrUrl' => $request->get('imagrUrl'),
+        $comment = new Comment([
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
             'updatedBy' => $request->get('updatedBy'),
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'isDeleted' => $request->get('isDeleted'),
+            'idUser' => $request->get('idUser'),
+            'idProduct' => $request->get('idProduct')
         ]);
-        $brand->save();
-        return response()->json('Add Brand Successfully.');
+        $comment->save();
+        return response()->json('Add comment Successfully.');
     }
 
     /**
@@ -60,8 +66,13 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        $brand = Brand::find($id);
-        return response()->json($brand);
+        $comment = DB::table('comment')
+        ->leftJoin('user','user.id','=','comment.idUser')
+        ->select('comment.idProduct','comment.rate','comment.content','comment.createdDate','comment.updatedDate')
+        ->selectRaw('user.fullname as Fullname')
+        ->where('comment.idUser','=' ,$id)
+        ->get();
+        return response()->json($comment);
     }
 
     /**
@@ -84,18 +95,18 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $brand = Brand::find($id);
-        $brand->name = $request->get('name');
-        $brand->imagrUrl = $request->get('imagrUrl');
-        $brand->createdBy = $request->get('createdBy');
-        $brand->createdDate = $request->get('createdDate');
-        $brand->updatedBy = $request->get('updatedBy');
-        $brand->updatedDate = $request->get('updatedDate');
-        $brand->deletedBy = $request->get('deletedBy');
-        $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
-        $brand->save();
-         return response()->json('Brand Update Successfully');
+        $comment = Comment::find($id);
+        $comment->createdBy = $request->get('createdBy');
+        $comment->createdDate = $request->get('createdDate');
+        $comment->updatedBy = $request->get('updatedBy');
+        $comment->updatedDate = $request->get('updatedDate');
+        $comment->deletedBy = $request->get('deletedBy');
+        $comment->deletedDate = $request->get('deletedDate');
+        $comment->isDeleted = $request->get('isDeleted');
+        $comment->isDeleted = $request->get('idUser');
+        $comment->isDeleted = $request->get('idProduct');
+        $comment->save();
+         return response()->json('comment Update Successfully');
     }
 
     /**
@@ -106,9 +117,9 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        $brand = Brand::find($id);
-        $brand->delete();
-        return response()->json('Brand Deleted Successfully');
+        $comment = Comment::find($id);
+        $comment->delete();
+        return response()->json('comment Deleted Successfully');
 
         //test
     }
