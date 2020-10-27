@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PC;
+use App\Models\Property;
+use Illuminate\Support\Facades\DB;
 
-class PCController extends Controller
+class PropertyController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,11 @@ class PCController extends Controller
      */
     public function index()
     {
-        $product_category = PC::all();
-        return response()->json($product_category);
+        $property = DB::table('property')
+        ->join('product','product.id','=','property.idProduct')
+        ->select('property.id','property.name','property.value')
+        ->get();
+        return response()->json($property);
     }
 
     /**
@@ -37,12 +41,13 @@ class PCController extends Controller
      */
     public function store(Request $request)
     {
-        $product_category = new PC([
-            'idCategory' => $request->get('idCategory'),
+        $property = new Property([
+            'name' => $request->get('name'),
+            'value' => $request->get('value'),
             'idProduct' => $request->get('idProduct')
         ]);
-        $product_category->save();
-        return response()->json('Add Product category Successfully.');
+        $property->save();
+        return response()->json('Add property Successfully.');
     }
 
     /**
@@ -53,8 +58,11 @@ class PCController extends Controller
      */
     public function show($id)
     {
-        $product_category = PC::find($id);
-        return response()->json($product_category);
+        $property = DB::table('property')
+        ->select('id','name','value')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($property);
     }
 
     /**
@@ -77,11 +85,12 @@ class PCController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product_category = PC::find($id);
-        $product_category->idCategory = $request->get('idCategory');
-        $product_category->idProduct = $request->get('idProduct');
-        $product_category->save();
-         return response()->json('Product category Update Successfully');
+        $role = Property::find($id);
+        $role->name = $request->get('name');
+        $role->value = $request->get('value');
+        $role->idProduct = $request->get('idProduct');
+        $role->save();
+         return response()->json('Role Update Successfully');
     }
 
     /**
@@ -92,8 +101,8 @@ class PCController extends Controller
      */
     public function destroy($id)
     {
-        $product_category = PC::find($id);
-        $product_category->delete();
-        return response()->json('Product category Deleted Successfully');
+        $role = Property::find($id);
+        $role->delete();
+        return response()->json('Property Deleted Successfully');
     }
 }

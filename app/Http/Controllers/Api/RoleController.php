@@ -18,7 +18,7 @@ class RoleController extends Controller
     {
         $role = DB::table('role')
         ->select('id','name','description')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
         return response()->json($role);
     }
@@ -50,7 +50,7 @@ class RoleController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'status' => $request->get('status')
         ]);
         $role->save();
         return response()->json('Add Role Successfully.');
@@ -100,7 +100,7 @@ class RoleController extends Controller
         $role->updatedDate = $request->get('updatedDate');
         $role->deletedBy = $request->get('deletedBy');
         $role->deletedDate = $request->get('deletedDate');
-        $role->isDeleted = $request->get('isDeleted');
+        $role->status = $request->get('status');
         $role->save();
          return response()->json('Role Update Successfully');
     }

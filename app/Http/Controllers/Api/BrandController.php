@@ -46,7 +46,8 @@ class BrandController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'status' => $request->get('status'),
+            'slug' => $request->get('slug'),
         ]);
         $brand->save();
         return response()->json('Add Brand Successfully.');
@@ -93,7 +94,8 @@ class BrandController extends Controller
         $brand->updatedDate = $request->get('updatedDate');
         $brand->deletedBy = $request->get('deletedBy');
         $brand->deletedDate = $request->get('deletedDate');
-        $brand->isDeleted = $request->get('isDeleted');
+        $brand->status = $request->get('status');
+        $brand->slug = $request->get('slug');
         $brand->save();
          return response()->json('Brand Update Successfully');
     }

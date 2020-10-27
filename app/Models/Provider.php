@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Provider extends Model
 {
     protected $table='provider';
-    protected $fillable=['name','createdBy','createdDate','isDeleted','address','phone'];
+    protected $fillable=['name','createdBy','createdDate','status','address','phone'];
     public $timestamps=false;
 }

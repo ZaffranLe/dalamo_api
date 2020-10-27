@@ -16,22 +16,63 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //$brand = Product::all();
+
         $product = DB::table('product')
                 // ->leftJoin('property','product.id','=','property.idProduct')
                 ->leftJoin('brand','brand.id','=','product.idBrand')
-                ->leftJoin('product_category','product_category.idProduct','=','product.id')
-                ->leftJoin('category','product_category.idCategory','=','category.id')
-                ->selectRaw('product.*')
-                ->selectRaw('brand.name as brandName')
-                ->selectRaw('category.name as categoryName')
-                ->select(DB::table('property')
-                ->select ('property.*')
-                    ->get())
-
+                ->leftJoin('category','category.id','=','product.idCategory')
+                ->leftJoin('image','image.idProduct','=','product.id')
+                ->leftJoin('comment','comment.idProduct','=','product.id')
+                ->select('product.id','brand.name as brandName','product.name','product.price','product.description'
+                ,'product.characteristic','product.guide','product.ingredient','product.preservation','product.origin'
+                ,'product.storageQuantity','product.transportingQuantity','product.isDiscount',
+                'product.discountPercent','product.isHot','product.isNew','image.id as id_img','image.name as name_img',
+                'category.name as category_Name','category.slug as category_Slug','category.id as category_Id')
                 ->get();
+                $productList=[];
+                foreach ($product as $val) {
+                    if(isset($productList[$val->id])){
+                            //Ton tai
+                            $item =$productList[$val->id];
+                            $item = [
+                                'category'=> [
+                                    'id_cate'=> $val->idCategory
+                                ]
+                            ];
+                    }else{
+                            //Chua ton tai
+                            $item = [
+                                'id'=> $val->id,
+                                'category'=> [
+                                    'id_cate'=> $val->id
+                                ]
+                                ];
+                            $productList[] =$item;
+                    }
+                }
+
+            // foreach ($product as $val){
+
+            // $cate = DB::table('category')->where('category.id',)
+            // ->select('category.name as categoryName','category.slug as categorySlug','category.id as categoryId')
+            // ->get();
+            // }
+            // $val->category = $cate;
+
+        // $cate = DB::table('category')
+        //     ->select('category.name')
+        //     ->get();
+        // $result = [
+        //     'product' => [
+        //         $product,
+        //         $cate
+        //     ]
+        // ];
+
+
         return response()->json($product);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -71,9 +112,10 @@ class ProductController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted'),
-            'isHot'=>$request->get('isHot'),
-            'isNew'=>$request->get('isNew')
+            'status' => $request->get('status'),
+            'isHot' => $request->get('isHot'),
+            'isNew' => $request->get('isNew'),
+            'idCategory' => $request->get('idCategory'),
         ]);
         $product->save();
         return response()->json('Add Product Successfully.');
@@ -99,7 +141,6 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-
     }
 
     /**
@@ -131,11 +172,12 @@ class ProductController extends Controller
         $product->updatedDate = $request->get('updatedDate');
         $product->deletedBy = $request->get('deletedBy');
         $product->deletedDate = $request->get('deletedDate');
-        $product->isDeleted = $request->get('isDeleted');
-        $product->isDeleted = $request->get('isHot');
-        $product->isDeleted = $request->get('isNew');
+        $product->status = $request->get('status');
+        $product->isHot = $request->get('isHot');
+        $product->isNew = $request->get('isNew');
+        $product->idCategory = $request->get('idCategory');
         $product->save();
-         return response()->json('Product Update Successfully');
+        return response()->json('Product Update Successfully');
     }
 
     /**

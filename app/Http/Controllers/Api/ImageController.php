@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\UP;
+use App\Models\Image;
+use Illuminate\Support\Facades\DB;
 
-class UPController extends Controller
+class ImageController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,10 @@ class UPController extends Controller
      */
     public function index()
     {
-        $user_permission = UP::all();
-        return response()->json($user_permission);
+        $image = DB::table('image')
+        ->select('image.*')
+        ->get();
+        return response()->json($image);
     }
 
     /**
@@ -37,12 +40,12 @@ class UPController extends Controller
      */
     public function store(Request $request)
     {
-        $user_permission = new UP([
-            'idUser' => $request->get('idUser'),
-            'idPermission' => $request->get('idPermission')
+        $image = new Image([
+            'name' => $request->get('name'),
+            'idProduct' => $request->get('idProduct')
         ]);
-        $user_permission->save();
-        return response()->json('Add User-permission Successfully.');
+        $image->save();
+        return response()->json('Add detail Image Successfully.');
     }
 
     /**
@@ -53,8 +56,8 @@ class UPController extends Controller
      */
     public function show($id)
     {
-        $user_permission = UP::find($id);
-        return response()->json($user_permission);
+        $image = Image::find($id);
+        return response()->json($image);
     }
 
     /**
@@ -77,11 +80,11 @@ class UPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->idUser = $request->get('idUser');
-        $user_permission->idPermission = $request->get('idPermission');
-        $user_permission->save();
-         return response()->json('User-permission Update Successfully');
+        $image = Image::find($id);
+        $image->name = $request->get('name');
+        $image->idProduct = $request->get('idProduct');
+        $image->save();
+         return response()->json('Detail Image Update Successfully');
     }
 
     /**
@@ -92,8 +95,8 @@ class UPController extends Controller
      */
     public function destroy($id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->delete();
-        return response()->json('User-permission Deleted Successfully');
+        $image = Image::find($id);
+        $image->delete();
+        return response()->json('Detail Image Deleted Successfully');
     }
 }

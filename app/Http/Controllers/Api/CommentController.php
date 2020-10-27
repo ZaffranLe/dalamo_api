@@ -18,9 +18,9 @@ class CommentController extends Controller
     {
         $comment = DB::table('comment')
             ->leftJoin('user','user.id','=','comment.idUser')
-            ->selectRaw('comment.*')
-            ->selectRaw('user.fullname as Fullname')
-            ->where('comment.isDeleted','=' ,0)
+            ->select('comment.content','comment.rate','comment.createdDate','comment.updatedDate',
+            'comment.idUser','user.fullname as Fullname')
+            ->where('comment.status','=',1)
             ->get();
         return response()->json($comment);
     }
@@ -50,7 +50,7 @@ class CommentController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted'),
+            'status' => $request->get('status'),
             'idUser' => $request->get('idUser'),
             'idProduct' => $request->get('idProduct')
         ]);
@@ -102,9 +102,9 @@ class CommentController extends Controller
         $comment->updatedDate = $request->get('updatedDate');
         $comment->deletedBy = $request->get('deletedBy');
         $comment->deletedDate = $request->get('deletedDate');
-        $comment->isDeleted = $request->get('isDeleted');
-        $comment->isDeleted = $request->get('idUser');
-        $comment->isDeleted = $request->get('idProduct');
+        $comment->status = $request->get('status');
+        $comment->idUser = $request->get('idUser');
+        $comment->idProduct = $request->get('idProduct');
         $comment->save();
          return response()->json('comment Update Successfully');
     }

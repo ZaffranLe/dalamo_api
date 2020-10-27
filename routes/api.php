@@ -33,11 +33,7 @@ Route::resource('order-receipt', 'Api\ORController');
 
 Route::resource('order-status', 'Api\OSController');
 
-Route::resource('permission', 'Api\PermissionController');
-
 Route::resource('product', 'Api\ProductController');
-
-Route::resource('product-category', 'Api\PCController');
 
 Route::resource('provider', 'Api\ProviderController');
 
@@ -45,6 +41,8 @@ Route::resource('role', 'Api\RoleController');
 
 Route::resource('user', 'Api\UserController');
 
-Route::resource('user-permission', 'Api\UPController');
+Route::resource('image', 'Api\ImageController');
+
+Route::resource('property', 'Api\PropertyController');
 
 

@@ -18,9 +18,9 @@ class UserController extends Controller
     {
         //$brand = Users::all();
         $user = DB::table('user')
-                ->leftJoin('role','role.id','=','user.idUserRole')
-                ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
-                ->where('user.isDeleted','=' ,0)
+                ->leftJoin('role','role.id','=','user.idRole')
+                ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
+                ->where('user.status','=' ,1)
                 ->get();
         return response()->json($user);
     }
@@ -49,14 +49,14 @@ class UserController extends Controller
             'phone' => $request->get('phone'),
             'address' => $request->get('address'),
             'password' => $request->get('password'),
-            'isUserRole' => $request->get('isUserRole'),
+            'idRole' => $request->get('idRole'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
             'updatedBy' => $request->get('updatedBy'),
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'status' => $request->get('status')
         ]);
         $user->save();
         return response()->json('Add User Successfully.');
@@ -71,8 +71,8 @@ class UserController extends Controller
     public function show($id)
     {
         $user = DB::table('user')
-        ->leftJoin('role','role.id','=','user.idUserRole')
-        ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
+        ->leftJoin('role','role.id','=','user.idRole')
+        ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
         ->where('user.id','=' ,$id)
         ->get();
         return response()->json($user);
@@ -111,7 +111,7 @@ class UserController extends Controller
         $user->updatedDate = $request->get('updatedDate');
         $user->deletedBy = $request->get('deletedBy');
         $user->deletedDate = $request->get('deletedDate');
-        $user->isDeleted = $request->get('isDeleted');
+        $user->status = $request->get('status');
         $user->save();
          return response()->json('User Update Successfully');
     }

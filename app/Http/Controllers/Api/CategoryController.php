@@ -18,7 +18,7 @@ class CategoryController extends Controller
     {
         $category = DB::table('category')
         ->select('id','slug','name')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
         return response()->json($category);
     }
@@ -49,7 +49,7 @@ class CategoryController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted'),
+            'status' => $request->get('status'),
             'name' => $request->get('name')
         ]);
         $category->save();
@@ -100,7 +100,7 @@ class CategoryController extends Controller
         $category->updatedDate = $request->get('updatedDate');
         $category->deletedBy = $request->get('deletedBy');
         $category->deletedDate = $request->get('deletedDate');
-        $category->isDeleted = $request->get('isDeleted');
+        $category->status = $request->get('status');
         $category->name = $request->get('name');
         $category->save();
          return response()->json('Category Update Successfully');
