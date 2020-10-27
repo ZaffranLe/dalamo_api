@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,8 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $category = DB::table('category')
-        ->select('id','slug','name')
-        ->where('isDeleted','=',0)
+        ->select('id','slug','name','status')
         ->get();
         return response()->json($category);
     }
@@ -49,7 +48,7 @@ class CategoryController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted'),
+            'status' => $request->get('status'),
             'name' => $request->get('name')
         ]);
         $category->save();
@@ -100,7 +99,7 @@ class CategoryController extends Controller
         $category->updatedDate = $request->get('updatedDate');
         $category->deletedBy = $request->get('deletedBy');
         $category->deletedDate = $request->get('deletedDate');
-        $category->isDeleted = $request->get('isDeleted');
+        $category->status = $request->get('status');
         $category->name = $request->get('name');
         $category->save();
          return response()->json('Category Update Successfully');

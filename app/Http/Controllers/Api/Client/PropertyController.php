@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\UP;
+use App\Models\Property;
+use Illuminate\Support\Facades\DB;
 
-class UPController extends Controller
+class PropertyController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,11 @@ class UPController extends Controller
      */
     public function index()
     {
-        $user_permission = UP::all();
-        return response()->json($user_permission);
+        $property = DB::table('property')
+        ->join('product','product.id','=','property.idProduct')
+        ->select('property.id','property.name','property.value')
+        ->get();
+        return response()->json($property);
     }
 
     /**
@@ -37,12 +41,13 @@ class UPController extends Controller
      */
     public function store(Request $request)
     {
-        $user_permission = new UP([
-            'idUser' => $request->get('idUser'),
-            'idPermission' => $request->get('idPermission')
+        $property = new Property([
+            'name' => $request->get('name'),
+            'value' => $request->get('value'),
+            'idProduct' => $request->get('idProduct')
         ]);
-        $user_permission->save();
-        return response()->json('Add User-permission Successfully.');
+        $property->save();
+        return response()->json('Add property Successfully.');
     }
 
     /**
@@ -53,8 +58,11 @@ class UPController extends Controller
      */
     public function show($id)
     {
-        $user_permission = UP::find($id);
-        return response()->json($user_permission);
+        $property = DB::table('property')
+        ->select('id','name','value')
+        ->where('id','=',$id)
+        ->get();
+        return response()->json($property);
     }
 
     /**
@@ -77,11 +85,12 @@ class UPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->idUser = $request->get('idUser');
-        $user_permission->idPermission = $request->get('idPermission');
-        $user_permission->save();
-         return response()->json('User-permission Update Successfully');
+        $role = Property::find($id);
+        $role->name = $request->get('name');
+        $role->value = $request->get('value');
+        $role->idProduct = $request->get('idProduct');
+        $role->save();
+         return response()->json('Role Update Successfully');
     }
 
     /**
@@ -92,8 +101,8 @@ class UPController extends Controller
      */
     public function destroy($id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->delete();
-        return response()->json('User-permission Deleted Successfully');
+        $role = Property::find($id);
+        $role->delete();
+        return response()->json('Property Deleted Successfully');
     }
 }

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Role;
-use Illuminate\Support\Facades\DB;
+use App\Models\Brand;
 
-class RoleController extends Controller
+class BrandController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,11 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $role = DB::table('role')
-        ->select('id','name','description')
-        ->where('isDeleted','=',0)
-        ->get();
-        return response()->json($role);
+        $brand = Brand::all();
+        return response()->json($brand);
     }
 
     /**
@@ -41,19 +37,20 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = new Role([
+        $brand = new Brand([
             'name' => $request->get('name'),
-            'description' => $request->get('description'),
+            'imagrUrl' => $request->get('imagrUrl'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
             'updatedBy' => $request->get('updatedBy'),
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'status' => $request->get('status'),
+            'slug' => $request->get('slug'),
         ]);
-        $role->save();
-        return response()->json('Add Role Successfully.');
+        $brand->save();
+        return response()->json('Add Brand Successfully.');
     }
 
     /**
@@ -64,11 +61,8 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = DB::table('role')
-        ->select('id','name','description')
-        ->where('id','=',$id)
-        ->get();
-        return response()->json($role);
+        $brand = Brand::find($id);
+        return response()->json($brand);
     }
 
     /**
@@ -91,18 +85,19 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
-        $role->name = $request->get('name');
-        $role->description = $request->get('description');
-        $role->createdBy = $request->get('createdBy');
-        $role->createdDate = $request->get('createdDate');
-        $role->updatedBy = $request->get('updatedBy');
-        $role->updatedDate = $request->get('updatedDate');
-        $role->deletedBy = $request->get('deletedBy');
-        $role->deletedDate = $request->get('deletedDate');
-        $role->isDeleted = $request->get('isDeleted');
-        $role->save();
-         return response()->json('Role Update Successfully');
+        $brand = Brand::find($id);
+        $brand->name = $request->get('name');
+        $brand->imagrUrl = $request->get('imagrUrl');
+        $brand->createdBy = $request->get('createdBy');
+        $brand->createdDate = $request->get('createdDate');
+        $brand->updatedBy = $request->get('updatedBy');
+        $brand->updatedDate = $request->get('updatedDate');
+        $brand->deletedBy = $request->get('deletedBy');
+        $brand->deletedDate = $request->get('deletedDate');
+        $brand->status = $request->get('status');
+        $brand->slug = $request->get('slug');
+        $brand->save();
+         return response()->json('Brand Update Successfully');
     }
 
     /**
@@ -113,8 +108,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        $role->delete();
-        return response()->json('Role Deleted Successfully');
+        $brand = Brand::find($id);
+        $brand->delete();
+        return response()->json('Brand Deleted Successfully');
+
+        //test
     }
 }

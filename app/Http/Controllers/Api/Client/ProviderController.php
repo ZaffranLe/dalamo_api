@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ProviderController extends Controller
     {
         $provider = DB::table('provider')
         ->select('id','name','email','address','description','phone')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
         return response()->json($provider);
     }
@@ -53,7 +53,7 @@ class ProviderController extends Controller
             'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'status' => $request->get('status')
         ]);
         $provider->save();
         return response()->json('Add Provider Successfully.');
@@ -106,7 +106,7 @@ class ProviderController extends Controller
         $provider->updatedDate = $request->get('updatedDate');
         $provider->deletedBy = $request->get('deletedBy');
         $provider->deletedDate = $request->get('deletedDate');
-        $provider->isDeleted = $request->get('isDeleted');
+        $provider->status = $request->get('status');
         $provider->save();
          return response()->json('Provider Update Successfully');
     }

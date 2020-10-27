@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class IPController extends Controller
     public function index()
     {
         //$brand = IP::all();
-        $data = DB::table('import_product')
+        $data = DB::table(' ')
                 ->join('detail_import_product','import_product.id','=','detail_import_product.idReceipt')
                 ->join('provider','provider.id','=','import_product.id')
                 ->select('import_product.id','import_product.importDate','provider.name as providerName','detail_import_product.quantity as totalPrice')
@@ -44,15 +44,11 @@ class IPController extends Controller
     public function store(Request $request)
     {
         $ip = new IP([
-            'idProvider' => $request->get('idProvider'),
-            'importDate' => $request->get('importDate'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'idProvider' => $request->get('idProvider'),
+            'importDate' => $request->get('importDate'),
+            'totalPrice' => $request->get('totalPrice')
         ]);
         $ip->save();
         return response()->json('Add Import product Successfully.');
@@ -91,15 +87,11 @@ class IPController extends Controller
     public function update(Request $request, $id)
     {
         $ip = IP::find($id);
-        $ip->idProvider = $request->get('idProvider');
-        $ip->importDate = $request->get('importDate');
         $ip->createdBy = $request->get('createdBy');
         $ip->createdDate = $request->get('createdDate');
-        $ip->updatedBy = $request->get('updatedBy');
-        $ip->updatedDate = $request->get('updatedDate');
-        $ip->deletedBy = $request->get('deletedBy');
-        $ip->deletedDate = $request->get('deletedDate');
-        $ip->isDeleted = $request->get('isDeleted');
+        $ip->idProvider = $request->get('idProvider');
+        $ip->importDate = $request->get('importDate');
+        $ip->totalPrice = $request->get('totalPrice');
         $ip->save();
          return response()->json('Import product Update Successfully');
     }
