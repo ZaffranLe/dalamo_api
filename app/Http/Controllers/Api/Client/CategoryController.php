@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Comment;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
-class CommentController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,13 +16,10 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comment = DB::table('comment')
-            ->leftJoin('user','user.id','=','comment.idUser')
-            ->select('comment.content','comment.rate','comment.createdDate','comment.updatedDate',
-            'comment.idUser','user.fullname as Fullname')
-            ->where('comment.status','=',1)
-            ->get();
-        return response()->json($comment);
+        $category = DB::table('category')
+        ->select('id','slug','name','status')
+        ->get();
+        return response()->json($category);
     }
 
     /**
@@ -43,7 +40,8 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $comment = new Comment([
+        $category = new Category([
+            'slug' => $request->get('slug'),
             'createdBy' => $request->get('createdBy'),
             'createdDate' => $request->get('createdDate'),
             'updatedBy' => $request->get('updatedBy'),
@@ -51,11 +49,10 @@ class CommentController extends Controller
             'deletedBy' => $request->get('deletedBy'),
             'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status'),
-            'idUser' => $request->get('idUser'),
-            'idProduct' => $request->get('idProduct')
+            'name' => $request->get('name')
         ]);
-        $comment->save();
-        return response()->json('Add comment Successfully.');
+        $category->save();
+        return response()->json('Add Category Successfully.');
     }
 
     /**
@@ -66,13 +63,12 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $comment = DB::table('comment')
-        ->leftJoin('user','user.id','=','comment.idUser')
-        ->select('comment.idProduct','comment.rate','comment.content','comment.createdDate','comment.updatedDate')
-        ->selectRaw('user.fullname as Fullname')
-        ->where('comment.idUser','=' ,$id)
+        $category = DB::table('category')
+        ->select('id','slug','name')
+        ->where('id','=',$id)
         ->get();
-        return response()->json($comment);
+
+        return response()->json($category);
     }
 
     /**
@@ -95,18 +91,18 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $comment = Comment::find($id);
-        $comment->createdBy = $request->get('createdBy');
-        $comment->createdDate = $request->get('createdDate');
-        $comment->updatedBy = $request->get('updatedBy');
-        $comment->updatedDate = $request->get('updatedDate');
-        $comment->deletedBy = $request->get('deletedBy');
-        $comment->deletedDate = $request->get('deletedDate');
-        $comment->status = $request->get('status');
-        $comment->idUser = $request->get('idUser');
-        $comment->idProduct = $request->get('idProduct');
-        $comment->save();
-         return response()->json('comment Update Successfully');
+        $category = Category::find($id);
+        $category->slug = $request->get('slug');
+        $category->createdBy = $request->get('createdBy');
+        $category->createdDate = $request->get('createdDate');
+        $category->updatedBy = $request->get('updatedBy');
+        $category->updatedDate = $request->get('updatedDate');
+        $category->deletedBy = $request->get('deletedBy');
+        $category->deletedDate = $request->get('deletedDate');
+        $category->status = $request->get('status');
+        $category->name = $request->get('name');
+        $category->save();
+         return response()->json('Category Update Successfully');
     }
 
     /**
@@ -117,10 +113,8 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        $comment = Comment::find($id);
-        $comment->delete();
-        return response()->json('comment Deleted Successfully');
-
-        //test
+        $category = Category::find($id);
+        $category->delete();
+        return response()->json('Category Deleted Successfully');
     }
 }

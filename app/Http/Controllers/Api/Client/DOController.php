@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Image;
-use Illuminate\Support\Facades\DB;
+use App\Models\Detail_order;
 
-class ImageController extends Controller
+class DOController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,10 +15,8 @@ class ImageController extends Controller
      */
     public function index()
     {
-        $image = DB::table('image')
-        ->select('image.*')
-        ->get();
-        return response()->json($image);
+        $detail_order = Detail_order::all();
+        return response()->json($detail_order);
     }
 
     /**
@@ -40,12 +37,13 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        $image = new Image([
-            'name' => $request->get('name'),
-            'idProduct' => $request->get('idProduct')
+        $detail_order = new Detail_order([
+            'idReceipt' => $request->get('idReceipt'),
+            'idProduct' => $request->get('idProduct'),
+            'quantity' => $request->get('quantity')
         ]);
-        $image->save();
-        return response()->json('Add detail Image Successfully.');
+        $detail_order->save();
+        return response()->json('Add detail order Successfully.');
     }
 
     /**
@@ -56,8 +54,8 @@ class ImageController extends Controller
      */
     public function show($id)
     {
-        $image = Image::find($id);
-        return response()->json($image);
+        $detail_order = Detail_order::find($id);
+        return response()->json($detail_order);
     }
 
     /**
@@ -80,11 +78,12 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $image = Image::find($id);
-        $image->name = $request->get('name');
-        $image->idProduct = $request->get('idProduct');
-        $image->save();
-         return response()->json('Detail Image Update Successfully');
+        $detail_order = Detail_order::find($id);
+        $detail_order->idReceipt = $request->get('idReceipt');
+        $detail_order->idProduct = $request->get('idProduct');
+        $detail_order->quantity = $request->get('quantity');
+        $detail_order->save();
+         return response()->json('Detail order Update Successfully');
     }
 
     /**
@@ -95,8 +94,8 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        $image = Image::find($id);
-        $image->delete();
-        return response()->json('Detail Image Deleted Successfully');
+        $detail_order = Detail_order::find($id);
+        $detail_order->delete();
+        return response()->json('Detail order Deleted Successfully');
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Role;
+use App\Models\Property;
 use Illuminate\Support\Facades\DB;
 
-class RoleController extends Controller
+class PropertyController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,11 +16,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $role = DB::table('role')
-        ->select('id','name','description')
-        ->where('status','=',1)
+        $property = DB::table('property')
+        ->join('product','product.id','=','property.idProduct')
+        ->select('property.id','property.name','property.value')
         ->get();
-        return response()->json($role);
+        return response()->json($property);
     }
 
     /**
@@ -41,19 +41,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = new Role([
+        $property = new Property([
             'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'status' => $request->get('status')
+            'value' => $request->get('value'),
+            'idProduct' => $request->get('idProduct')
         ]);
-        $role->save();
-        return response()->json('Add Role Successfully.');
+        $property->save();
+        return response()->json('Add property Successfully.');
     }
 
     /**
@@ -64,11 +58,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = DB::table('role')
-        ->select('id','name','description')
+        $property = DB::table('property')
+        ->select('id','name','value')
         ->where('id','=',$id)
         ->get();
-        return response()->json($role);
+        return response()->json($property);
     }
 
     /**
@@ -91,16 +85,10 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
+        $role = Property::find($id);
         $role->name = $request->get('name');
-        $role->description = $request->get('description');
-        $role->createdBy = $request->get('createdBy');
-        $role->createdDate = $request->get('createdDate');
-        $role->updatedBy = $request->get('updatedBy');
-        $role->updatedDate = $request->get('updatedDate');
-        $role->deletedBy = $request->get('deletedBy');
-        $role->deletedDate = $request->get('deletedDate');
-        $role->status = $request->get('status');
+        $role->value = $request->get('value');
+        $role->idProduct = $request->get('idProduct');
         $role->save();
          return response()->json('Role Update Successfully');
     }
@@ -113,8 +101,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
+        $role = Property::find($id);
         $role->delete();
-        return response()->json('Role Deleted Successfully');
+        return response()->json('Property Deleted Successfully');
     }
 }

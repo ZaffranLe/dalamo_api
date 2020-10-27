@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Property;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 
-class PropertyController extends Controller
+class ImageController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,11 +16,10 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $property = DB::table('property')
-        ->join('product','product.id','=','property.idProduct')
-        ->select('property.id','property.name','property.value')
+        $image = DB::table('image')
+        ->select('image.*')
         ->get();
-        return response()->json($property);
+        return response()->json($image);
     }
 
     /**
@@ -41,13 +40,12 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $property = new Property([
+        $image = new Image([
             'name' => $request->get('name'),
-            'value' => $request->get('value'),
             'idProduct' => $request->get('idProduct')
         ]);
-        $property->save();
-        return response()->json('Add property Successfully.');
+        $image->save();
+        return response()->json('Add detail Image Successfully.');
     }
 
     /**
@@ -58,11 +56,8 @@ class PropertyController extends Controller
      */
     public function show($id)
     {
-        $property = DB::table('property')
-        ->select('id','name','value')
-        ->where('id','=',$id)
-        ->get();
-        return response()->json($property);
+        $image = Image::find($id);
+        return response()->json($image);
     }
 
     /**
@@ -85,12 +80,11 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Property::find($id);
-        $role->name = $request->get('name');
-        $role->value = $request->get('value');
-        $role->idProduct = $request->get('idProduct');
-        $role->save();
-         return response()->json('Role Update Successfully');
+        $image = Image::find($id);
+        $image->name = $request->get('name');
+        $image->idProduct = $request->get('idProduct');
+        $image->save();
+         return response()->json('Detail Image Update Successfully');
     }
 
     /**
@@ -101,8 +95,8 @@ class PropertyController extends Controller
      */
     public function destroy($id)
     {
-        $role = Property::find($id);
-        $role->delete();
-        return response()->json('Property Deleted Successfully');
+        $image = Image::find($id);
+        $image->delete();
+        return response()->json('Detail Image Deleted Successfully');
     }
 }
