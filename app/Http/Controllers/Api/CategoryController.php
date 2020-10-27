@@ -17,8 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $category = DB::table('category')
-        ->select('id','slug','name')
-        ->where('status','=',1)
+        ->select('id','slug','name','status')
         ->get();
         return response()->json($category);
     }
