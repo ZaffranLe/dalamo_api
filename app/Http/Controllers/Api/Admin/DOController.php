@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as time;
+use App\Models\Detail_order;
 
-class CategoryController extends Controller
+class DOController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -17,10 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = DB::table('category')
-        ->select('id','slug','name','status')
-        ->get();
-        return response()->json($category);
+        $detail_order = Detail_order::all();
+        return response()->json($detail_order);
     }
 
     /**
@@ -41,15 +37,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category([
-            'slug' => $request->get('slug'),
-            'name' => $request->get('name'),
-            'status' => $request->get('status'),
-            'createdBy' => 1,
-            'createdDate' =>  time::now()
+        $detail_order = new Detail_order([
+            'idReceipt' => $request->get('idReceipt'),
+            'idProduct' => $request->get('idProduct'),
+            'quantity' => $request->get('quantity')
         ]);
-        $category->save();
-        return response()->json($category);
+        $detail_order->save();
+        return response()->json('Add detail order Successfully.');
     }
 
     /**
@@ -60,12 +54,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = DB::table('category')
-        ->select('id','slug','name')
-        ->where('id','=',$id)
-        ->get();
-
-        return response()->json($category);
+        $detail_order = Detail_order::find($id);
+        return response()->json($detail_order);
     }
 
     /**
@@ -88,14 +78,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::find($id);
-        $category->slug = $request->get('slug');
-        $category->status = $request->get('status');
-        $category->name = $request->get('name');
-        $category->updatedBy = 1;
-        $category->updatedDate = time::now();
-        $category->save();
-         return response()->json($category);
+        $detail_order = Detail_order::find($id);
+        $detail_order->idReceipt = $request->get('idReceipt');
+        $detail_order->idProduct = $request->get('idProduct');
+        $detail_order->quantity = $request->get('quantity');
+        $detail_order->save();
+         return response()->json('Detail order Update Successfully');
     }
 
     /**
@@ -106,8 +94,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        $category->delete();
-        return response()->json('Category Deleted Successfully');
+        $detail_order = Detail_order::find($id);
+        $detail_order->delete();
+        return response()->json('Detail order Deleted Successfully');
     }
 }

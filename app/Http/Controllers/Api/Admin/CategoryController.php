@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as time;
 
 class CategoryController extends Controller
 {
@@ -43,13 +42,17 @@ class CategoryController extends Controller
     {
         $category = new Category([
             'slug' => $request->get('slug'),
-            'name' => $request->get('name'),
+            'createdBy' => $request->get('createdBy'),
+            'createdDate' => $request->get('createdDate'),
+            'updatedBy' => $request->get('updatedBy'),
+            'updatedDate' => $request->get('updatedDate'),
+            'deletedBy' => $request->get('deletedBy'),
+            'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status'),
-            'createdBy' => 1,
-            'createdDate' =>  time::now()
+            'name' => $request->get('name')
         ]);
         $category->save();
-        return response()->json($category);
+        return response()->json('Add Category Successfully.');
     }
 
     /**
@@ -90,12 +93,16 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->slug = $request->get('slug');
+        $category->createdBy = $request->get('createdBy');
+        $category->createdDate = $request->get('createdDate');
+        $category->updatedBy = $request->get('updatedBy');
+        $category->updatedDate = $request->get('updatedDate');
+        $category->deletedBy = $request->get('deletedBy');
+        $category->deletedDate = $request->get('deletedDate');
         $category->status = $request->get('status');
         $category->name = $request->get('name');
-        $category->updatedBy = 1;
-        $category->updatedDate = time::now();
         $category->save();
-         return response()->json($category);
+         return response()->json('Category Update Successfully');
     }
 
     /**

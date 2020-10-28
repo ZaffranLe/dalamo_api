@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class RoleController extends Controller
 {
@@ -44,16 +45,12 @@ class RoleController extends Controller
         $role = new Role([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
+            'createdBy' => 1,
+            'createdDate' => time::now(),
             'status' => $request->get('status')
         ]);
         $role->save();
-        return response()->json('Add Role Successfully.');
+        return response()->json($role);
     }
 
     /**
@@ -94,15 +91,11 @@ class RoleController extends Controller
         $role = Role::find($id);
         $role->name = $request->get('name');
         $role->description = $request->get('description');
-        $role->createdBy = $request->get('createdBy');
-        $role->createdDate = $request->get('createdDate');
-        $role->updatedBy = $request->get('updatedBy');
-        $role->updatedDate = $request->get('updatedDate');
-        $role->deletedBy = $request->get('deletedBy');
-        $role->deletedDate = $request->get('deletedDate');
+        $role->updatedBy = 1;
+        $role->updatedDate = time::now();
         $role->status = $request->get('status');
         $role->save();
-         return response()->json('Role Update Successfully');
+         return response()->json($role);
     }
 
     /**

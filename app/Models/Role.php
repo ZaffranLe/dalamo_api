@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $table='role';
-    protected $fillable=['name','createdBy','createdDate','isDeleted'];
+    protected $fillable=['name','createdBy','createdDate','status'];
     public $timestamps=false;
 }
