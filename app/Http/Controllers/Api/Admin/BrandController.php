@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
-use Carbon\Carbon as time;
 
 class BrandController extends Controller
 {
@@ -41,13 +40,17 @@ class BrandController extends Controller
         $brand = new Brand([
             'name' => $request->get('name'),
             'imagrUrl' => $request->get('imagrUrl'),
-            'createdBy' => 1,
-            'createdDate' =>  time::now(),
+            'createdBy' => $request->get('createdBy'),
+            'createdDate' => $request->get('createdDate'),
+            'updatedBy' => $request->get('updatedBy'),
+            'updatedDate' => $request->get('updatedDate'),
+            'deletedBy' => $request->get('deletedBy'),
+            'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status'),
             'slug' => $request->get('slug'),
         ]);
         $brand->save();
-        return response()->json($brand);
+        return response()->json('Add Brand Successfully.');
     }
 
     /**
@@ -85,8 +88,12 @@ class BrandController extends Controller
         $brand = Brand::find($id);
         $brand->name = $request->get('name');
         $brand->imagrUrl = $request->get('imagrUrl');
-        $brand->updatedBy =1;
-        $brand->updatedDate = time::now();
+        $brand->createdBy = $request->get('createdBy');
+        $brand->createdDate = $request->get('createdDate');
+        $brand->updatedBy = $request->get('updatedBy');
+        $brand->updatedDate = $request->get('updatedDate');
+        $brand->deletedBy = $request->get('deletedBy');
+        $brand->deletedDate = $request->get('deletedDate');
         $brand->status = $request->get('status');
         $brand->slug = $request->get('slug');
         $brand->save();

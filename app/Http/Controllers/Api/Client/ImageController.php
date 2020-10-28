@@ -45,7 +45,7 @@ class ImageController extends Controller
             'idProduct' => $request->get('idProduct')
         ]);
         $image->save();
-        return response()->json('Add detail Image Successfully.');
+        return response()->json($image);
     }
 
     /**
@@ -84,7 +84,7 @@ class ImageController extends Controller
         $image->name = $request->get('name');
         $image->idProduct = $request->get('idProduct');
         $image->save();
-         return response()->json('Detail Image Update Successfully');
+         return response()->json($image);
     }
 
     /**

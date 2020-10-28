@@ -47,7 +47,7 @@ class PropertyController extends Controller
             'idProduct' => $request->get('idProduct')
         ]);
         $property->save();
-        return response()->json('Add property Successfully.');
+        return response()->json($property);
     }
 
     /**
@@ -85,12 +85,12 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Property::find($id);
-        $role->name = $request->get('name');
-        $role->value = $request->get('value');
-        $role->idProduct = $request->get('idProduct');
-        $role->save();
-         return response()->json('Role Update Successfully');
+        $property = Property::find($id);
+        $property->name = $request->get('name');
+        $property->value = $request->get('value');
+        $property->idProduct = $request->get('idProduct');
+        $property->save();
+         return response()->json($property);
     }
 
     /**
@@ -101,8 +101,8 @@ class PropertyController extends Controller
      */
     public function destroy($id)
     {
-        $role = Property::find($id);
-        $role->delete();
+        $property = Property::find($id);
+        $property->delete();
         return response()->json('Property Deleted Successfully');
     }
 }

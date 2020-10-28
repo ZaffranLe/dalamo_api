@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Provider;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as time;
 
 class ProviderController extends Controller
 {
@@ -48,12 +47,16 @@ class ProviderController extends Controller
             'address' => $request->get('address'),
             'description' => $request->get('description'),
             'phone' => $request->get('phone'),
-            'createdBy' => 1,
-            'createdDate' => time::now(),
+            'createdBy' => $request->get('createdBy'),
+            'createdDate' => $request->get('createdDate'),
+            'updatedBy' => $request->get('updatedBy'),
+            'updatedDate' => $request->get('updatedDate'),
+            'deletedBy' => $request->get('deletedBy'),
+            'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status')
         ]);
         $provider->save();
-        return response()->json($provider);
+        return response()->json('Add Provider Successfully.');
     }
 
     /**
@@ -97,11 +100,15 @@ class ProviderController extends Controller
         $provider->address = $request->get('address');
         $provider->description = $request->get('description');
         $provider->phone = $request->get('phone');
-        $provider->updatedBy = 1;
-        $provider->updatedDate = time::now();
+        $provider->createdBy = $request->get('createdBy');
+        $provider->createdDate = $request->get('createdDate');
+        $provider->updatedBy = $request->get('updatedBy');
+        $provider->updatedDate = $request->get('updatedDate');
+        $provider->deletedBy = $request->get('deletedBy');
+        $provider->deletedDate = $request->get('deletedDate');
         $provider->status = $request->get('status');
         $provider->save();
-         return response()->json($provider);
+         return response()->json('Provider Update Successfully');
     }
 
     /**

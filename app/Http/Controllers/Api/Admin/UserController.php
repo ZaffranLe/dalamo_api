@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Users;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as time;
 
 class UserController extends Controller
 {
@@ -51,12 +50,16 @@ class UserController extends Controller
             'address' => $request->get('address'),
             'password' => $request->get('password'),
             'idRole' => $request->get('idRole'),
-            'createdBy' =>1,
-            'createdDate' =>time::now(),
+            'createdBy' => $request->get('createdBy'),
+            'createdDate' => $request->get('createdDate'),
+            'updatedBy' => $request->get('updatedBy'),
+            'updatedDate' => $request->get('updatedDate'),
+            'deletedBy' => $request->get('deletedBy'),
+            'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status')
         ]);
         $user->save();
-        return response()->json($user);
+        return response()->json('Add User Successfully.');
     }
 
     /**
@@ -101,12 +104,16 @@ class UserController extends Controller
         $user->phone = $request->get('phone');
         $user->address = $request->get('address');
         $user->password = $request->get('password');
-        $user->idRole = $request->get('idRole');
-        $user->updatedBy = 1;
-        $user->updatedDate = time::now();
+        $user->isUserRole = $request->get('isUserRole');
+        $user->createdBy = $request->get('createdBy');
+        $user->createdDate = $request->get('createdDate');
+        $user->updatedBy = $request->get('updatedBy');
+        $user->updatedDate = $request->get('updatedDate');
+        $user->deletedBy = $request->get('deletedBy');
+        $user->deletedDate = $request->get('deletedDate');
         $user->status = $request->get('status');
         $user->save();
-         return response()->json($user);
+         return response()->json('User Update Successfully');
     }
 
     /**

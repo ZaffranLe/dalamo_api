@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon as time;
 
 class CommentController extends Controller
 {
@@ -45,10 +44,12 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $comment = new Comment([
-            'createdBy' => 1,
-            'createdDate' =>  time::now(),
+            'createdBy' => $request->get('createdBy'),
+            'createdDate' => $request->get('createdDate'),
+            'updatedBy' => $request->get('updatedBy'),
+            'updatedDate' => $request->get('updatedDate'),
             'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => time::now(),
+            'deletedDate' => $request->get('deletedDate'),
             'status' => $request->get('status'),
             'idUser' => $request->get('idUser'),
             'idProduct' => $request->get('idProduct')
@@ -95,14 +96,17 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        $comment->updatedBy = 1;
-        $comment->updatedDate =time::now();
+        $comment->createdBy = $request->get('createdBy');
+        $comment->createdDate = $request->get('createdDate');
+        $comment->updatedBy = $request->get('updatedBy');
+        $comment->updatedDate = $request->get('updatedDate');
         $comment->deletedBy = $request->get('deletedBy');
+        $comment->deletedDate = $request->get('deletedDate');
         $comment->status = $request->get('status');
         $comment->idUser = $request->get('idUser');
         $comment->idProduct = $request->get('idProduct');
         $comment->save();
-         return response()->json($comment);
+         return response()->json('comment Update Successfully');
     }
 
     /**
