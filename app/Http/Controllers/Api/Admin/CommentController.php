@@ -54,7 +54,7 @@ class CommentController extends Controller
             'idProduct' => $request->get('idProduct')
         ]);
         $comment->save();
-        return response()->json('Add comment Successfully.');
+        return response()->json($comment);
     }
 
     /**
