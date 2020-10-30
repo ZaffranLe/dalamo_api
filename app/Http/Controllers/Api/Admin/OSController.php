@@ -109,6 +109,6 @@ class OSController extends Controller
     {
         $order_status = OS::find($id);
         $order_status->delete();
-        return response()->json('Order-status Deleted Successfully');
+        return response()->json($order_status);
     }
 }

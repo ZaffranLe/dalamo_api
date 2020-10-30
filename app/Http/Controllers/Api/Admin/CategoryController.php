@@ -108,6 +108,6 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->delete();
-        return response()->json('Category Deleted Successfully');
+        return response()->json($category);
     }
 }

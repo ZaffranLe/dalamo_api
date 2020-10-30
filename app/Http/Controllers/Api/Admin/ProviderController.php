@@ -114,6 +114,6 @@ class ProviderController extends Controller
     {
         $provider = Provider::find($id);
         $provider->delete();
-        return response()->json('Provider Deleted Successfully');
+        return response()->json($provider);
     }
 }

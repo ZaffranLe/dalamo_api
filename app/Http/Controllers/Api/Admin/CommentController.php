@@ -115,7 +115,7 @@ class CommentController extends Controller
     {
         $comment = Comment::find($id);
         $comment->delete();
-        return response()->json('comment Deleted Successfully');
+        return response()->json($comment);
 
         //test
     }

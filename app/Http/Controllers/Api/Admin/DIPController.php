@@ -96,6 +96,6 @@ class DIPController extends Controller
     {
         $dip = DIP::find($id);
         $dip->delete();
-        return response()->json('Detail import product Deleted Successfully');
+        return response()->json($dip);
     }
 }
