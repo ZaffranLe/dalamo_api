@@ -97,6 +97,6 @@ class ImageController extends Controller
     {
         $image = Image::find($id);
         $image->delete();
-        return response()->json('Detail Image Deleted Successfully');
+        return response()->json($image);
     }
 }
