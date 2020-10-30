@@ -103,6 +103,6 @@ class PropertyController extends Controller
     {
         $property = Property::find($id);
         $property->delete();
-        return response()->json('Property Deleted Successfully');
+        return response()->json($property);
     }
 }
