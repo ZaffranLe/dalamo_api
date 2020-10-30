@@ -105,6 +105,6 @@ class IPController extends Controller
     {
         $ip = IP::find($id);
         $ip->delete();
-        return response()->json('Import product Deleted Successfully');
+        return response()->json($ip);
     }
 }

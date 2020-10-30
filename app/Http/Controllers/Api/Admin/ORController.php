@@ -117,6 +117,6 @@ class ORController extends Controller
     {
         $order_receipt = Order_receipt::find($id);
         $order_receipt->delete();
-        return response()->json('Order Receipt Deleted Successfully');
+        return response()->json($order_receipt);
     }
 }

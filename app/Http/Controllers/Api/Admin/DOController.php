@@ -96,6 +96,6 @@ class DOController extends Controller
     {
         $detail_order = Detail_order::find($id);
         $detail_order->delete();
-        return response()->json('Detail order Deleted Successfully');
+        return response()->json($detail_order);
     }
 }
