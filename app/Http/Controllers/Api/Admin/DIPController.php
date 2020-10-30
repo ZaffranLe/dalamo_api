@@ -43,7 +43,7 @@ class DIPController extends Controller
             'quantity' => $request->get('quantity')
         ]);
         $dip->save();
-        return response()->json('Add detail import product Successfully.');
+        return response()->json($dip);
     }
 
     /**
@@ -83,7 +83,7 @@ class DIPController extends Controller
         $dip->idProduct = $request->get('idProduct');
         $dip->quantity = $request->get('quantity');
         $dip->save();
-         return response()->json('Detail import product Update Successfully');
+         return response()->json($dip);
     }
 
     /**

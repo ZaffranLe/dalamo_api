@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\OS;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class OSController extends Controller
 {
@@ -45,16 +46,12 @@ class OSController extends Controller
         $order_status = new OS([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
+            'createdBy' => 1,
+            'createdDate' =>time::now(),
             'status' => $request->get('status')
         ]);
         $order_status->save();
-        return response()->json('Add Order-status Successfully.');
+        return response()->json( $order_status);
     }
 
     /**
@@ -95,15 +92,11 @@ class OSController extends Controller
         $order_status = OS::find($id);
         $order_status->name = $request->get('name');
         $order_status->description = $request->get('description');
-        $order_status->createdBy = $request->get('createdBy');
-        $order_status->createdDate = $request->get('createdDate');
-        $order_status->updatedBy = $request->get('updatedBy');
-        $order_status->updatedDate = $request->get('updatedDate');
-        $order_status->deletedBy = $request->get('deletedBy');
-        $order_status->deletedDate = $request->get('deletedDate');
+        $order_status->updatedBy =1;
+        $order_status->updatedDate = time::now();
         $order_status->status = $request->get('status');
         $order_status->save();
-         return response()->json('Order-status Update Successfully');
+         return response()->json($order_status);
     }
 
     /**

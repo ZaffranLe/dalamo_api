@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class ProductController extends Controller
 {
@@ -33,26 +34,35 @@ class ProductController extends Controller
                 foreach ($product as $val) {
                     if(isset($productList[$val->id])){
                             //Ton tai
-                            $item =$productList[$val->id];
-                            $item = [
-                                'category'=> [
-                                    'id_cate'=> $val->idCategory,
-                                    'name_cate'=>$val->category_Name,
-                                    'slug_cate'=>$val->category_Slug
-                                ]
+                            $productList[$val->id]['images'][] =  [
+                                'id_img'=> $val->id_img,
+                                'name_img'=> $val->name_img
                             ];
-                            $productList[]=$item;
+                            // $productList[]=$item;
                     }else{
                             //Chua ton tai
                             $item = [
                                 'id'=> $val->id,
-                                'category'=> [
-                                    'id_cate'=> $val->id,
-                                    'name_cate'=>$val->category_Name,
-                                    'slug_cate'=>$val->category_Slug
+                                'name'=>$val->name,
+                                'price'=>$val->price,
+                                'description'=>$val->description,
+                                'characteristic'=>$val->characteristic,
+                                'guide'=>$val->guide,
+                                'ingredient'=>$val->ingredient,
+                                'preservation'=>$val->preservation,
+                                'origin'=>$val->origin,
+                                'storageQuantity'=>$val->storageQuantity,
+                                'transportingQuantity'=>$val->transportingQuantity,
+                                'isDiscount'=>$val->isDiscount,
+                                'discountPercent'=>$val->discountPercent,
+                                'isHot'=>$val->isHot,
+                                'isNew'=>$val->isNew,
+                                'images'=> [
+                                    ['id_img'=> $val->id_img,
+                                    'name_img'=> $val->name_img]
                                 ]
                                 ];
-                            $productList[] =$item;
+                            $productList[$val->id] =$item;
                     }
                 }
 
@@ -75,7 +85,7 @@ class ProductController extends Controller
         // ];
 
 
-        return response()->json($productList);
+        return response()->json(array_values($productList));
     }
 
 
@@ -111,19 +121,15 @@ class ProductController extends Controller
             'transportingQuantity' => $request->get('transportingQuantity'),
             'isDiscount' => $request->get('isDiscount'),
             'discountPercent' => $request->get('discountPercent'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
+            'createdBy' => 1,
+            'createdDate' =>  time::now(),
             'status' => $request->get('status'),
             'isHot' => $request->get('isHot'),
             'isNew' => $request->get('isNew'),
             'idCategory' => $request->get('idCategory'),
         ]);
         $product->save();
-        return response()->json('Add Product Successfully.');
+        return response()->json($product);
     }
 
     /**
@@ -171,18 +177,14 @@ class ProductController extends Controller
         $product->transportingQuantity = $request->get('transportingQuantity');
         $product->isDiscount = $request->get('isDiscount');
         $product->discountPercent = $request->get('discountPercent');
-        $product->createdBy = $request->get('createdBy');
-        $product->createdDate = $request->get('createdDate');
-        $product->updatedBy = $request->get('updatedBy');
-        $product->updatedDate = $request->get('updatedDate');
-        $product->deletedBy = $request->get('deletedBy');
-        $product->deletedDate = $request->get('deletedDate');
+        $product->updatedBy =1;
+        $product->updatedDate = time::now();
         $product->status = $request->get('status');
         $product->isHot = $request->get('isHot');
         $product->isNew = $request->get('isNew');
         $product->idCategory = $request->get('idCategory');
         $product->save();
-        return response()->json('Product Update Successfully');
+        return response()->json($product);
     }
 
     /**
