@@ -90,7 +90,7 @@ class BrandController extends Controller
         $brand->status = $request->get('status');
         $brand->slug = $request->get('slug');
         $brand->save();
-         return response()->json('Brand Update Successfully');
+         return response()->json($brand);
     }
 
     /**
@@ -103,7 +103,7 @@ class BrandController extends Controller
     {
         $brand = Brand::find($id);
         $brand->delete();
-        return response()->json('Brand Deleted Successfully');
+        return response()->json($brand);
 
         //test
     }
