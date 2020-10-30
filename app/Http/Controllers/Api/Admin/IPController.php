@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\IP;
+use Carbon\Carbon as time;
 
 class IPController extends Controller
 {
@@ -44,14 +45,14 @@ class IPController extends Controller
     public function store(Request $request)
     {
         $ip = new IP([
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
+            'createdBy' => 1,
+            'createdDate' =>  time::now(),
             'idProvider' => $request->get('idProvider'),
             'importDate' => $request->get('importDate'),
             'totalPrice' => $request->get('totalPrice')
         ]);
         $ip->save();
-        return response()->json('Add Import product Successfully.');
+        return response()->json($ip);
     }
 
     /**
@@ -87,13 +88,11 @@ class IPController extends Controller
     public function update(Request $request, $id)
     {
         $ip = IP::find($id);
-        $ip->createdBy = $request->get('createdBy');
-        $ip->createdDate = $request->get('createdDate');
         $ip->idProvider = $request->get('idProvider');
         $ip->importDate = $request->get('importDate');
         $ip->totalPrice = $request->get('totalPrice');
         $ip->save();
-         return response()->json('Import product Update Successfully');
+         return response()->json($ip);
     }
 
     /**

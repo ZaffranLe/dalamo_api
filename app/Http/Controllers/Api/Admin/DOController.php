@@ -43,7 +43,7 @@ class DOController extends Controller
             'quantity' => $request->get('quantity')
         ]);
         $detail_order->save();
-        return response()->json('Add detail order Successfully.');
+        return response()->json($detail_order);
     }
 
     /**
@@ -83,7 +83,7 @@ class DOController extends Controller
         $detail_order->idProduct = $request->get('idProduct');
         $detail_order->quantity = $request->get('quantity');
         $detail_order->save();
-         return response()->json('Detail order Update Successfully');
+         return response()->json($detail_order);
     }
 
     /**

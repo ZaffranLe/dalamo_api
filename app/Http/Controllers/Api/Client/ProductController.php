@@ -34,12 +34,11 @@ class ProductController extends Controller
                 foreach ($product as $val) {
                     if(isset($productList[$val->id])){
                             //Ton tai
-                            $item =$productList[$val->id];
-                            $item['images'][] =  [
-                                'id_cate'=> $val->id_img,
+                            $productList[$val->id]['images'][] =  [
+                                'id_img'=> $val->id_img,
                                 'name_img'=> $val->name_img
                             ];
-                            $productList[]=$item;
+                            // $productList[]=$item;
                     }else{
                             //Chua ton tai
                             $item = [
@@ -59,11 +58,11 @@ class ProductController extends Controller
                                 'isHot'=>$val->isHot,
                                 'isNew'=>$val->isNew,
                                 'images'=> [
-                                    'id_cate'=> $val->id_img,
-                                    'name_img'=> $val->name_img
+                                    ['id_img'=> $val->id_img,
+                                    'name_img'=> $val->name_img]
                                 ]
                                 ];
-                            $productList[] =$item;
+                            $productList[$val->id] =$item;
                     }
                 }
 
@@ -86,7 +85,7 @@ class ProductController extends Controller
         // ];
 
 
-        return response()->json($productList);
+        return response()->json(array_values($productList));
     }
 
 
