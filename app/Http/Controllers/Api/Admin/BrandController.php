@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\UP;
+use App\Models\Brand;
+use Carbon\Carbon as time;
 
-class UPController extends Controller
+class BrandController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,8 @@ class UPController extends Controller
      */
     public function index()
     {
-        $user_permission = UP::all();
-        return response()->json($user_permission);
+        $brand = Brand::all();
+        return response()->json($brand);
     }
 
     /**
@@ -37,12 +38,16 @@ class UPController extends Controller
      */
     public function store(Request $request)
     {
-        $user_permission = new UP([
-            'idUser' => $request->get('idUser'),
-            'idPermission' => $request->get('idPermission')
+        $brand = new Brand([
+            'name' => $request->get('name'),
+            'imagrUrl' => $request->get('imagrUrl'),
+            'createdBy' => 1,
+            'createdDate' =>  time::now(),
+            'status' => $request->get('status'),
+            'slug' => $request->get('slug'),
         ]);
-        $user_permission->save();
-        return response()->json('Add User-permission Successfully.');
+        $brand->save();
+        return response()->json($brand);
     }
 
     /**
@@ -53,8 +58,8 @@ class UPController extends Controller
      */
     public function show($id)
     {
-        $user_permission = UP::find($id);
-        return response()->json($user_permission);
+        $brand = Brand::find($id);
+        return response()->json($brand);
     }
 
     /**
@@ -77,11 +82,15 @@ class UPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->idUser = $request->get('idUser');
-        $user_permission->idPermission = $request->get('idPermission');
-        $user_permission->save();
-         return response()->json('User-permission Update Successfully');
+        $brand = Brand::find($id);
+        $brand->name = $request->get('name');
+        $brand->imagrUrl = $request->get('imagrUrl');
+        $brand->updatedBy =1;
+        $brand->updatedDate = time::now();
+        $brand->status = $request->get('status');
+        $brand->slug = $request->get('slug');
+        $brand->save();
+         return response()->json($brand);
     }
 
     /**
@@ -92,8 +101,10 @@ class UPController extends Controller
      */
     public function destroy($id)
     {
-        $user_permission = UP::find($id);
-        $user_permission->delete();
-        return response()->json('User-permission Deleted Successfully');
+        $brand = Brand::find($id);
+        $brand->delete();
+        return response()->json($brand);
+
+        //test
     }
 }

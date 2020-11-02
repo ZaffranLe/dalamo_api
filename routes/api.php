@@ -17,34 +17,32 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::apiResource('brand', 'Api\BrandController');
+Route::apiResource('admin/brand', 'Api\Admin\BrandController');
 
-Route::resource('category', 'Api\CategoryController');
+Route::apiResource('admin/category', 'Api\Admin\CategoryController');
 
-Route::resource('comment', 'Api\CommentController');
+Route::apiResource('admin/comment', 'Api\Admin\CommentController');
 
-Route::resource('detail-import-product', 'Api\DIPController');
+Route::apiResource('admin/detail-import-product', 'Api\Admin\DIPController');
 
-Route::resource('detail-order', 'Api\DOController');
+Route::apiResource('admin/detail-order', 'Api\Admin\DOController');
 
-Route::resource('import-product', 'Api\IPController');
+Route::apiResource('admin/import-product', 'Api\Admin\IPController');
 
-Route::resource('order-receipt', 'Api\ORController');
+Route::apiResource('admin/order-receipt', 'Api\Admin\ORController');
 
-Route::resource('order-status', 'Api\OSController');
+Route::apiResource('admin/order-status', 'Api\Admin\OSController');
 
-Route::resource('permission', 'Api\PermissionController');
+Route::apiResource('admin/product', 'Api\Admin\ProductController');
 
-Route::resource('product', 'Api\ProductController');
+Route::apiResource('admin/provider', 'Api\Admin\ProviderController');
 
-Route::resource('product-category', 'Api\PCController');
+Route::apiResource('admin/role', 'Api\Admin\RoleController');
 
-Route::resource('provider', 'Api\ProviderController');
+Route::apiResource('admin/user', 'Api\Admin\UserController');
 
-Route::resource('role', 'Api\RoleController');
+Route::apiResource('admin/image', 'Api\Admin\ImageController');
 
-Route::resource('user', 'Api\UserController');
-
-Route::resource('user-permission', 'Api\UPController');
+Route::apiResource('admin/property', 'Api\Admin\PropertyController');
 
 

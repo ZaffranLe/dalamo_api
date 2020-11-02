@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Detail_order;
+use App\Models\DIP;
 
-class DOController extends Controller
+class DIPController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +15,8 @@ class DOController extends Controller
      */
     public function index()
     {
-        $detail_order = Detail_order::all();
-        return response()->json($detail_order);
+        $dip = DIP::all();
+        return response()->json($dip);
     }
 
     /**
@@ -37,13 +37,13 @@ class DOController extends Controller
      */
     public function store(Request $request)
     {
-        $detail_order = new Detail_order([
+        $dip = new DIP([
             'idReceipt' => $request->get('idReceipt'),
             'idProduct' => $request->get('idProduct'),
             'quantity' => $request->get('quantity')
         ]);
-        $detail_order->save();
-        return response()->json('Add detail order Successfully.');
+        $dip->save();
+        return response()->json($dip);
     }
 
     /**
@@ -54,8 +54,8 @@ class DOController extends Controller
      */
     public function show($id)
     {
-        $detail_order = Detail_order::find($id);
-        return response()->json($detail_order);
+        $dip = DIP::find($id);
+        return response()->json($dip);
     }
 
     /**
@@ -78,12 +78,12 @@ class DOController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $detail_order = Detail_order::find($id);
-        $detail_order->idReceipt = $request->get('idReceipt');
-        $detail_order->idProduct = $request->get('idProduct');
-        $detail_order->quantity = $request->get('quantity');
-        $detail_order->save();
-         return response()->json('Detail order Update Successfully');
+        $dip = DIP::find($id);
+        $dip->idReceipt = $request->get('idReceipt');
+        $dip->idProduct = $request->get('idProduct');
+        $dip->quantity = $request->get('quantity');
+        $dip->save();
+         return response()->json($dip);
     }
 
     /**
@@ -94,8 +94,8 @@ class DOController extends Controller
      */
     public function destroy($id)
     {
-        $detail_order = Detail_order::find($id);
-        $detail_order->delete();
-        return response()->json('Detail order Deleted Successfully');
+        $dip = DIP::find($id);
+        $dip->delete();
+        return response()->json($dip);
     }
 }

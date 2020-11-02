@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Permission;
+use App\Models\OS;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
-class PermissionController extends Controller
+class OSController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,11 +17,12 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permission = DB::table('permission')
+        $order_status = DB::table('order_status')
         ->select('id','name','description')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
-        return response()->json($permission);
+
+        return response()->json($order_status);
     }
 
     /**
@@ -41,19 +43,15 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $permission = new Permission([
+        $order_status = new OS([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'createdBy' => 1,
+            'createdDate' =>time::now(),
+            'status' => $request->get('status')
         ]);
-        $permission->save();
-        return response()->json('Add Permission Successfully.');
+        $order_status->save();
+        return response()->json( $order_status);
     }
 
     /**
@@ -64,11 +62,11 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $permission = DB::table('permission')
+        $order_status = DB::table('order_status')
         ->select('id','name','description')
         ->where('id','=',$id)
         ->get();
-        return response()->json($permission);
+        return response()->json($order_status);
     }
 
     /**
@@ -91,18 +89,14 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $permission = Permission::find($id);
-        $permission->name = $request->get('name');
-        $permission->description = $request->get('description');
-        $permission->createdBy = $request->get('createdBy');
-        $permission->createdDate = $request->get('createdDate');
-        $permission->updatedBy = $request->get('updatedBy');
-        $permission->updatedDate = $request->get('updatedDate');
-        $permission->deletedBy = $request->get('deletedBy');
-        $permission->deletedDate = $request->get('deletedDate');
-        $permission->isDeleted = $request->get('isDeleted');
-        $permission->save();
-         return response()->json('Permission Update Successfully');
+        $order_status = OS::find($id);
+        $order_status->name = $request->get('name');
+        $order_status->description = $request->get('description');
+        $order_status->updatedBy =1;
+        $order_status->updatedDate = time::now();
+        $order_status->status = $request->get('status');
+        $order_status->save();
+         return response()->json($order_status);
     }
 
     /**
@@ -113,8 +107,8 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::find($id);
-        $permission->delete();
-        return response()->json('Permission Deleted Successfully');
+        $order_status = OS::find($id);
+        $order_status->delete();
+        return response()->json($order_status);
     }
 }

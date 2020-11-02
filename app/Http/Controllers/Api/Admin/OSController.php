@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Role;
+use App\Models\OS;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
-class RoleController extends Controller
+class OSController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -16,11 +17,12 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $role = DB::table('role')
+        $order_status = DB::table('order_status')
         ->select('id','name','description')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
-        return response()->json($role);
+
+        return response()->json($order_status);
     }
 
     /**
@@ -41,19 +43,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = new Role([
+        $order_status = new OS([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'createdBy' => 1,
+            'createdDate' =>time::now(),
+            'status' => $request->get('status')
         ]);
-        $role->save();
-        return response()->json('Add Role Successfully.');
+        $order_status->save();
+        return response()->json( $order_status);
     }
 
     /**
@@ -64,11 +62,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = DB::table('role')
+        $order_status = DB::table('order_status')
         ->select('id','name','description')
         ->where('id','=',$id)
         ->get();
-        return response()->json($role);
+        return response()->json($order_status);
     }
 
     /**
@@ -91,18 +89,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
-        $role->name = $request->get('name');
-        $role->description = $request->get('description');
-        $role->createdBy = $request->get('createdBy');
-        $role->createdDate = $request->get('createdDate');
-        $role->updatedBy = $request->get('updatedBy');
-        $role->updatedDate = $request->get('updatedDate');
-        $role->deletedBy = $request->get('deletedBy');
-        $role->deletedDate = $request->get('deletedDate');
-        $role->isDeleted = $request->get('isDeleted');
-        $role->save();
-         return response()->json('Role Update Successfully');
+        $order_status = OS::find($id);
+        $order_status->name = $request->get('name');
+        $order_status->description = $request->get('description');
+        $order_status->updatedBy =1;
+        $order_status->updatedDate = time::now();
+        $order_status->status = $request->get('status');
+        $order_status->save();
+         return response()->json($order_status);
     }
 
     /**
@@ -113,8 +107,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        $role->delete();
-        return response()->json('Role Deleted Successfully');
+        $order_status = OS::find($id);
+        $order_status->delete();
+        return response()->json($order_status);
     }
 }

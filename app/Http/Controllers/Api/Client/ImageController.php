@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PC;
+use App\Models\Image;
+use Illuminate\Support\Facades\DB;
 
-class PCController extends Controller
+class ImageController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +16,10 @@ class PCController extends Controller
      */
     public function index()
     {
-        $product_category = PC::all();
-        return response()->json($product_category);
+        $image = DB::table('image')
+        ->select('image.*')
+        ->get();
+        return response()->json($image);
     }
 
     /**
@@ -37,12 +40,12 @@ class PCController extends Controller
      */
     public function store(Request $request)
     {
-        $product_category = new PC([
-            'idCategory' => $request->get('idCategory'),
+        $image = new Image([
+            'name' => $request->get('name'),
             'idProduct' => $request->get('idProduct')
         ]);
-        $product_category->save();
-        return response()->json('Add Product category Successfully.');
+        $image->save();
+        return response()->json($image);
     }
 
     /**
@@ -53,8 +56,8 @@ class PCController extends Controller
      */
     public function show($id)
     {
-        $product_category = PC::find($id);
-        return response()->json($product_category);
+        $image = Image::find($id);
+        return response()->json($image);
     }
 
     /**
@@ -77,11 +80,11 @@ class PCController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product_category = PC::find($id);
-        $product_category->idCategory = $request->get('idCategory');
-        $product_category->idProduct = $request->get('idProduct');
-        $product_category->save();
-         return response()->json('Product category Update Successfully');
+        $image = Image::find($id);
+        $image->name = $request->get('name');
+        $image->idProduct = $request->get('idProduct');
+        $image->save();
+         return response()->json($image);
     }
 
     /**
@@ -92,8 +95,8 @@ class PCController extends Controller
      */
     public function destroy($id)
     {
-        $product_category = PC::find($id);
-        $product_category->delete();
-        return response()->json('Product category Deleted Successfully');
+        $image = Image::find($id);
+        $image->delete();
+        return response()->json($image);
     }
 }

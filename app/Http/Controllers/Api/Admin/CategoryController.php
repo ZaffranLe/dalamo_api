@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DIP;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
-class DIPController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -15,8 +17,10 @@ class DIPController extends Controller
      */
     public function index()
     {
-        $dip = DIP::all();
-        return response()->json($dip);
+        $category = DB::table('category')
+        ->select('id','slug','name','status')
+        ->get();
+        return response()->json($category);
     }
 
     /**
@@ -37,13 +41,15 @@ class DIPController extends Controller
      */
     public function store(Request $request)
     {
-        $dip = new DIP([
-            'idReceipt' => $request->get('idReceipt'),
-            'idProduct' => $request->get('idProduct'),
-            'quantity' => $request->get('quantity')
+        $category = new Category([
+            'slug' => $request->get('slug'),
+            'name' => $request->get('name'),
+            'status' => $request->get('status'),
+            'createdBy' => 1,
+            'createdDate' =>  time::now()
         ]);
-        $dip->save();
-        return response()->json('Add detail import product Successfully.');
+        $category->save();
+        return response()->json($category);
     }
 
     /**
@@ -54,8 +60,12 @@ class DIPController extends Controller
      */
     public function show($id)
     {
-        $dip = DIP::find($id);
-        return response()->json($dip);
+        $category = DB::table('category')
+        ->select('id','slug','name')
+        ->where('id','=',$id)
+        ->get();
+
+        return response()->json($category);
     }
 
     /**
@@ -78,12 +88,14 @@ class DIPController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dip = DIP::find($id);
-        $dip->idReceipt = $request->get('idReceipt');
-        $dip->idProduct = $request->get('idProduct');
-        $dip->quantity = $request->get('quantity');
-        $dip->save();
-         return response()->json('Detail import product Update Successfully');
+        $category = Category::find($id);
+        $category->slug = $request->get('slug');
+        $category->status = $request->get('status');
+        $category->name = $request->get('name');
+        $category->updatedBy = 1;
+        $category->updatedDate = time::now();
+        $category->save();
+         return response()->json($category);
     }
 
     /**
@@ -94,8 +106,8 @@ class DIPController extends Controller
      */
     public function destroy($id)
     {
-        $dip = DIP::find($id);
-        $dip->delete();
-        return response()->json('Detail import product Deleted Successfully');
+        $category = Category::find($id);
+        $category->delete();
+        return response()->json($category);
     }
 }

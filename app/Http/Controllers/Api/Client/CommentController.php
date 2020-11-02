@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class CommentController extends Controller
 {
@@ -18,9 +19,9 @@ class CommentController extends Controller
     {
         $comment = DB::table('comment')
             ->leftJoin('user','user.id','=','comment.idUser')
-            ->selectRaw('comment.*')
-            ->selectRaw('user.fullname as Fullname')
-            ->where('comment.isDeleted','=' ,0)
+            ->select('comment.content','comment.rate','comment.createdDate','comment.updatedDate',
+            'comment.idUser','user.fullname as Fullname')
+            ->where('comment.status','=',1)
             ->get();
         return response()->json($comment);
     }
@@ -44,18 +45,16 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $comment = new Comment([
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
+            'createdBy' => 1,
+            'createdDate' =>  time::now(),
             'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted'),
+            'deletedDate' => time::now(),
+            'status' => $request->get('status'),
             'idUser' => $request->get('idUser'),
             'idProduct' => $request->get('idProduct')
         ]);
         $comment->save();
-        return response()->json('Add comment Successfully.');
+        return response()->json($comment);
     }
 
     /**
@@ -96,17 +95,14 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        $comment->createdBy = $request->get('createdBy');
-        $comment->createdDate = $request->get('createdDate');
-        $comment->updatedBy = $request->get('updatedBy');
-        $comment->updatedDate = $request->get('updatedDate');
+        $comment->updatedBy = 1;
+        $comment->updatedDate =time::now();
         $comment->deletedBy = $request->get('deletedBy');
-        $comment->deletedDate = $request->get('deletedDate');
-        $comment->isDeleted = $request->get('isDeleted');
-        $comment->isDeleted = $request->get('idUser');
-        $comment->isDeleted = $request->get('idProduct');
+        $comment->status = $request->get('status');
+        $comment->idUser = $request->get('idUser');
+        $comment->idProduct = $request->get('idProduct');
         $comment->save();
-         return response()->json('comment Update Successfully');
+         return response()->json($comment);
     }
 
     /**
@@ -119,7 +115,7 @@ class CommentController extends Controller
     {
         $comment = Comment::find($id);
         $comment->delete();
-        return response()->json('comment Deleted Successfully');
+        return response()->json($comment);
 
         //test
     }

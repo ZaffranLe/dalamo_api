@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Users;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class UserController extends Controller
 {
@@ -18,9 +19,9 @@ class UserController extends Controller
     {
         //$brand = Users::all();
         $user = DB::table('user')
-                ->leftJoin('role','role.id','=','user.idUserRole')
-                ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
-                ->where('user.isDeleted','=' ,0)
+                ->leftJoin('role','role.id','=','user.idRole')
+                ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
+                ->where('user.status','=' ,1)
                 ->get();
         return response()->json($user);
     }
@@ -49,17 +50,13 @@ class UserController extends Controller
             'phone' => $request->get('phone'),
             'address' => $request->get('address'),
             'password' => $request->get('password'),
-            'isUserRole' => $request->get('isUserRole'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'idRole' => $request->get('idRole'),
+            'createdBy' =>1,
+            'createdDate' =>time::now(),
+            'status' => $request->get('status')
         ]);
         $user->save();
-        return response()->json('Add User Successfully.');
+        return response()->json($user);
     }
 
     /**
@@ -71,8 +68,8 @@ class UserController extends Controller
     public function show($id)
     {
         $user = DB::table('user')
-        ->leftJoin('role','role.id','=','user.idUserRole')
-        ->select('user.id','user.fullName','user.idUserRole','role.name as roleName','user.email','user.phone','user.address')
+        ->leftJoin('role','role.id','=','user.idRole')
+        ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
         ->where('user.id','=' ,$id)
         ->get();
         return response()->json($user);
@@ -104,16 +101,12 @@ class UserController extends Controller
         $user->phone = $request->get('phone');
         $user->address = $request->get('address');
         $user->password = $request->get('password');
-        $user->isUserRole = $request->get('isUserRole');
-        $user->createdBy = $request->get('createdBy');
-        $user->createdDate = $request->get('createdDate');
-        $user->updatedBy = $request->get('updatedBy');
-        $user->updatedDate = $request->get('updatedDate');
-        $user->deletedBy = $request->get('deletedBy');
-        $user->deletedDate = $request->get('deletedDate');
-        $user->isDeleted = $request->get('isDeleted');
+        $user->idRole = $request->get('idRole');
+        $user->updatedBy = 1;
+        $user->updatedDate = time::now();
+        $user->status = $request->get('status');
         $user->save();
-         return response()->json('User Update Successfully');
+         return response()->json($user);
     }
 
     /**
@@ -126,6 +119,6 @@ class UserController extends Controller
     {
         $user = Users::find($id);
         $user->delete();
-        return response()->json('User Deleted Successfully');
+        return response()->json($user);
     }
 }

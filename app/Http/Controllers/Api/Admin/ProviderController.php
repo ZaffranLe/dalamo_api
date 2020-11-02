@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Provider;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon as time;
 
 class ProviderController extends Controller
 {
@@ -18,7 +19,7 @@ class ProviderController extends Controller
     {
         $provider = DB::table('provider')
         ->select('id','name','email','address','description','phone')
-        ->where('isDeleted','=',0)
+        ->where('status','=',1)
         ->get();
         return response()->json($provider);
     }
@@ -47,16 +48,12 @@ class ProviderController extends Controller
             'address' => $request->get('address'),
             'description' => $request->get('description'),
             'phone' => $request->get('phone'),
-            'createdBy' => $request->get('createdBy'),
-            'createdDate' => $request->get('createdDate'),
-            'updatedBy' => $request->get('updatedBy'),
-            'updatedDate' => $request->get('updatedDate'),
-            'deletedBy' => $request->get('deletedBy'),
-            'deletedDate' => $request->get('deletedDate'),
-            'isDeleted' => $request->get('isDeleted')
+            'createdBy' => 1,
+            'createdDate' => time::now(),
+            'status' => $request->get('status')
         ]);
         $provider->save();
-        return response()->json('Add Provider Successfully.');
+        return response()->json($provider);
     }
 
     /**
@@ -100,15 +97,11 @@ class ProviderController extends Controller
         $provider->address = $request->get('address');
         $provider->description = $request->get('description');
         $provider->phone = $request->get('phone');
-        $provider->createdBy = $request->get('createdBy');
-        $provider->createdDate = $request->get('createdDate');
-        $provider->updatedBy = $request->get('updatedBy');
-        $provider->updatedDate = $request->get('updatedDate');
-        $provider->deletedBy = $request->get('deletedBy');
-        $provider->deletedDate = $request->get('deletedDate');
-        $provider->isDeleted = $request->get('isDeleted');
+        $provider->updatedBy = 1;
+        $provider->updatedDate = time::now();
+        $provider->status = $request->get('status');
         $provider->save();
-         return response()->json('Provider Update Successfully');
+         return response()->json($provider);
     }
 
     /**
@@ -121,6 +114,6 @@ class ProviderController extends Controller
     {
         $provider = Provider::find($id);
         $provider->delete();
-        return response()->json('Provider Deleted Successfully');
+        return response()->json($provider);
     }
 }
