@@ -18,12 +18,37 @@ class IPController extends Controller
     public function index()
     {
         //$brand = IP::all();
-        $data = DB::table(' ')
-                ->join('detail_import_product','import_product.id','=','detail_import_product.idReceipt')
-                ->join('provider','provider.id','=','import_product.id')
-                ->select('import_product.id','import_product.importDate','provider.name as providerName','detail_import_product.quantity as totalPrice')
+        $import_product = DB::table('import_product')
+                ->leftJoin('detail_import_product','import_product.id','=','detail_import_product.idReceipt')
+                ->leftJoin('provider','provider.id','=','import_product.id')
+                ->leftJoin('product','detail_import_product.idProduct','=','product.id')
+                ->select('import_product.id','import_product.importDate','provider.name as providerName',
+                'detail_import_product.quantity as totalPrice','product.name as nameProduct','product.id as idProduct')
                 ->get();
-        return response()->json($data);
+                $productList=[];
+                foreach($import_product as $val){
+                    if(isset($productList[$val->id])){
+                        // Tồn tại
+                        $productList[$val->id]['product'][]=[
+                            'idProduct'=>$val->idProduct,
+                            'nameProduct'=>$val->nameProduct,
+                            'totalPrice'=>$val->totalPrice
+                        ];
+                    }
+                    else{
+                        $item=[
+                            'id'=>$val->id,
+                            'importDate'=>$val->importDate,
+                            'providerName'=>$val->providerName,
+                            'product'=>[
+                                'idProduct'=>$val->idProduct,
+                                'nameProduct'=>$val->nameProduct
+                            ]
+                            ];
+                        $productList[$val->id]=$item;
+                    }
+                }
+        return response()->json($productList);
     }
 
     /**

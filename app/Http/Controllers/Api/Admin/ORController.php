@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Client;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,11 +19,42 @@ class ORController extends Controller
     {
         //$brand = Order_receipt::all();
         $order_receipt = DB::table('order_receipt')
-                ->join('user','user.id','=','order_receipt.idUser')
-                ->join('order_status','order_status.id','=','order_receipt.idStatus')
-                ->select('order_receipt.id','order_receipt.totalPrice','order_status.name as statusName','order_receipt.name','order_receipt.phone','order_receipt.address','order_receipt.note','user.fullname as userOrdered')
+                ->leftJoin('order_status','order_status.id','=','order_receipt.idStatus')
+                ->leftJoin('detail_order','detail_order.idReceipt','=','order_receipt.id')
+                ->leftJoin('product','product.id','=','detail_order.idProduct')
+                ->select('order_receipt.id','order_receipt.totalPrice','order_status.name as statusName',
+                'order_receipt.name','order_receipt.phone','order_receipt.address','order_receipt.note',
+                'product.id as idProduct','product.name as nameProduct','detail_order.quantity as priceTotal')
                 ->get();
-        return response()->json($order_receipt);
+                $order_receiptList=[];
+                foreach($order_receipt as $val){
+                    if(isset($order_receiptList[$val->id])){
+                        // Tồn tại
+                        $order_receiptList[$val->id]['product'][]=[
+                            'idProduct'=>$val->idProduct,
+                            'nameProduct'=>$val->nameProduct
+                        ];
+
+                    }
+                    else{
+                        $item=[
+                            'id'=>$val->id,
+                            'totalPrice'=>$val->totalPrice,
+                            'statusName'=>$val->statusName,
+                            'name'=>$val->name,
+                            'phone'=>$val->phone,
+                            'address'=>$val->address,
+                            'note'=>$val->note,
+                            'priceTotal'=>$val->priceTotal,
+                            'product'=>[
+                                'idProduct'=>$val->idProduct,
+                                'nameProduct'=>$val->nameProduct
+                            ]
+                            ];
+                            $order_receiptList[$val->id]=$item;
+                    }
+                }
+        return response()->json($order_receiptList);
     }
 
     /**
