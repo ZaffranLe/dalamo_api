@@ -30,7 +30,8 @@ class ProductController extends Controller
                 'product.transportingQuantity','product.isDiscount','product.discountPercent',
                 'product.isHot','product.isNew','image.id as id_img','image.name as name_img',
                 'category.name as category_Name','property.id as id_property',
-                'property.name as name_property','property.value as value_property')
+                'property.name as name_property','property.value as value_property'
+                ,'brand.id as brandId','category.id as categoryId')
                 ->get();
                 $productList=[];
                 foreach ($product as $val) {
@@ -71,7 +72,9 @@ class ProductController extends Controller
                                 'discountPercent'=>$val->discountPercent,
                                 'isHot'=>$val->isHot,
                                 'isNew'=>$val->isNew,
-                                'category_Name'=>$val->category_Name,
+                                'categoryId'=>$val->categoryId,
+                                'categoryName'=>$val->category_Name,
+                                'brandId'=>$val->brandId,
                                 'brandName'=>$val->brandName,
                                 'images'=> [
                                     ['id_img'=> $val->id_img,
