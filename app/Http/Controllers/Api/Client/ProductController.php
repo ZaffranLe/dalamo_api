@@ -166,8 +166,81 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
-        return response()->json($product);
+        $product = DB::table('product')
+                ->leftJoin('property','product.id','=','property.idProduct')
+                ->leftJoin('brand','brand.id','=','product.idBrand')
+                ->leftJoin('category','category.id','=','product.idCategory')
+                ->leftJoin('image','image.idProduct','=','product.id')
+                ->leftJoin('comment','comment.idProduct','=','product.id')
+                ->select('product.id','brand.name as brandName','product.name','product.price',
+                'product.description','product.characteristic','product.guide','product.ingredient',
+                'product.preservation','product.origin','product.storageQuantity',
+                'product.transportingQuantity','product.isDiscount','product.discountPercent',
+                'product.isHot','product.isNew','product.slug','image.id as id_img','image.name as name_img',
+                'category.name as category_Name','property.id as id_property',
+                'property.name as name_property','property.value as value_property'
+                ,'brand.id as brandId','category.id as categoryId')
+                ->where('product.id' , '=' ,$id)
+                ->get();
+                $productList=[];
+                foreach ($product as $val) {
+                    if(isset($productList[$val->id])){
+                            //Ton tai
+                            $productList[$val->id]
+                            ['images'][] =[
+                                'id_img'=> $val->id_img,
+                                'name_img'=> $val->name_img
+                            ];
+                            $productList[$val->id]
+                            ['property'][] =[
+                                'id_property'=>$val->id_property,
+                                 'name_property'=>$val->name_property,
+                                'value_property'=>$val->value_property
+                            ];
+                        //     ['property'][]=[
+                        //         'id_property'=>$val->id_property,
+                        //         'name_property'=>$val->name_property,
+                        //         'value_property'=>$val->value_property
+                        // ];
+                            // $productList[]=$item;
+                    }else{
+                            //Chua ton tai
+                            $item = [
+                                'id'=> $val->id,
+                                'name'=>$val->name,
+                                'price'=>$val->price,
+                                'description'=>$val->description,
+                                'characteristic'=>$val->characteristic,
+                                'guide'=>$val->guide,
+                                'ingredient'=>$val->ingredient,
+                                'preservation'=>$val->preservation,
+                                'origin'=>$val->origin,
+                                'storageQuantity'=>$val->storageQuantity,
+                                'transportingQuantity'=>$val->transportingQuantity,
+                                'isDiscount'=>$val->isDiscount,
+                                'discountPercent'=>$val->discountPercent,
+                                'isHot'=>$val->isHot,
+                                'isNew'=>$val->isNew,
+                                'slug'=>$val->slug,
+                                'categoryId'=>$val->categoryId,
+                                'categoryName'=>$val->category_Name,
+                                'brandId'=>$val->brandId,
+                                'brandName'=>$val->brandName,
+                                'images'=> [
+                                    ['id_img'=> $val->id_img,
+                                    'name_img'=> $val->name_img]
+                                ],
+                                'property' => [
+                                    [
+                                    'id_property'=>$val->id_property,
+                                    'name_property'=>$val->name_property,
+                                    'value_property'=>$val->value_property]
+                                    ]
+                                ];
+                            $productList[$val->id] =$item;
+                    }
+                }
+                return response()->json($productList);
     }
 
     /**
