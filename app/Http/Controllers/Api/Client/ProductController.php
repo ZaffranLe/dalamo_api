@@ -28,7 +28,7 @@ class ProductController extends Controller
                 'product.description','product.characteristic','product.guide','product.ingredient',
                 'product.preservation','product.origin','product.storageQuantity',
                 'product.transportingQuantity','product.isDiscount','product.discountPercent',
-                'product.isHot','product.isNew','image.id as id_img','image.name as name_img',
+                'product.isHot','product.isNew','product.slug','image.id as id_img','image.name as name_img',
                 'category.name as category_Name','property.id as id_property',
                 'property.name as name_property','property.value as value_property'
                 ,'brand.id as brandId','category.id as categoryId')
@@ -72,6 +72,7 @@ class ProductController extends Controller
                                 'discountPercent'=>$val->discountPercent,
                                 'isHot'=>$val->isHot,
                                 'isNew'=>$val->isNew,
+                                'slug'=>$val->slug,
                                 'categoryId'=>$val->categoryId,
                                 'categoryName'=>$val->category_Name,
                                 'brandId'=>$val->brandId,
