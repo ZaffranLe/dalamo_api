@@ -43,6 +43,11 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        
+        'admin' => [
+            'verify.jwt',
+            'check_role:1'
+        ]
     ];
 
     /**
@@ -63,5 +68,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verify.jwt' => \App\Http\Middleware\VerifyJWTToken::class,
+        'check_role' => \App\Http\Middleware\CheckRole::class,
     ];
 }

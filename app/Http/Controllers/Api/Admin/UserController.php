@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
 
@@ -17,7 +17,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        //$brand = Users::all();
         $user = DB::table('user')
                 ->leftJoin('role','role.id','=','user.idRole')
                 ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
@@ -44,7 +43,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new Users([
+        $user = new User([
             'fullName' => $request->get('fullName'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
@@ -95,7 +94,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = Users::find($id);
+        $user = User::find($id);
      	$user->fullName = $request->get('fullName');
         $user->email = $request->get('email');
         $user->phone = $request->get('phone');
@@ -117,7 +116,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = Users::find($id);
+        $user = User::find($id);
         $user->delete();
         return response()->json($user);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order_receipt;
+use App\Models\Detail_order;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
 
@@ -76,18 +77,32 @@ class ORController extends Controller
     public function store(Request $request)
     {
         $order_receipt = new Order_receipt([
-        	'idStatus' => $request->get('idStatus'),
+        	'idStatus' => 1,
             'name' => $request->get('name'),
             'phone' => $request->get('phone'),
             'address' => $request->get('address'),
             'note' => $request->get('note'),
             'idUser' => $request->get('idUser'),
-            'createdBy' => 1,
+            'createdBy' => 0,
             'createdDate' =>  time::now(),
-            'idStatus' => $request->get('idStatus'),
             'totalPrice' => $request->get('totalPrice')
         ]);
         $order_receipt->save();
+        
+        $detail_order = $request->get('products');
+        
+        foreach ($detail_order as $val) {
+            $do_obj = new Detail_order([
+                'idReceipt' => $order_receipt->id,
+                'quantity' => $val["quantity"],
+                'price' => $val["price"],
+                'idProduct' => $val["idProduct"],
+            ]);
+            $do_obj->save();
+        }
+
+        $order_receipt->products = $detail_order;
+
         return response()->json($order_receipt);
     }
 
