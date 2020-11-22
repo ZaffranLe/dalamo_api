@@ -7,6 +7,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\Role;
 use Carbon\Carbon as time;
 use Illuminate\Support\Facades\DB;
 
@@ -37,15 +38,31 @@ class AuthController extends Controller
             ['email', '=', $email],
             ['password', '=', $password]
         ]);
+        $role = Role::find($user->idRole);
+        $user->role = $role->name;
 
-        if (!($token = JWTAuth::claims(['exp' => time::now()->addDays(7)->timestamp])->fromUser($user))) {
+        if (!$user) {
+            return response(['error' => 'Sai email hoặc mật khẩu.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $customClaims = [
+            'exp' => time::now()->addDays(7)->timestamp,
+            'user' => [
+                'id'=> $user->id,
+                'role' => $role->name,
+                'fullName' => $user->fullName,
+                'email' => $user->email,
+                'address' => $user->address,
+                'phone' => $user->phone
+            ]
+        ];
+        if (!($token = JWTAuth::claims($customClaims)->fromUser($user))) {
             return response()->json([
                 'status' => 'error',
                 'error' => 'invalid.credentials',
                 'msg' => 'Invalid Credentials.'
             ], Response::HTTP_BAD_REQUEST);
         }
-
         return response()->json(['token' => $token], Response::HTTP_OK);
     }
 

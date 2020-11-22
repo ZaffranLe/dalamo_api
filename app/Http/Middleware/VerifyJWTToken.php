@@ -27,12 +27,10 @@ class VerifyJWTToken
             $token = JWTAuth::getToken();
             $user = JWTAuth::getPayload($token);
             if ($user) {
-                $userExist = DB::table('user')
-            ->leftJoin('role', 'role.id', '=', 'user.idRole')
-            ->select('user.id', 'user.fullName', 'role.name as role', 'user.email', 'user.phone', 'user.address')
-            ->where('user.id', '=', $user["sub"])
-            ->get()->first();
+                $userExist = User::find($user["sub"]);
                 if ($userExist) {
+                    $role = Role::find($userExist->idRole);
+                    $userExist->role = $role->name;
                     $request->user = $userExist;
                     return $next($request);
                 } else {
