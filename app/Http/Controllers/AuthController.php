@@ -38,7 +38,7 @@ class AuthController extends Controller
             ['password', '=', $password]
         ]);
 
-        if (!($token = JWTAuth::fromUser($user))) {
+        if (!($token = JWTAuth::claims(['exp' => time::now()->addDays(7)->timestamp])->fromUser($user))) {
             return response()->json([
                 'status' => 'error',
                 'error' => 'invalid.credentials',
@@ -49,7 +49,7 @@ class AuthController extends Controller
         return response()->json(['token' => $token], Response::HTTP_OK);
     }
 
-    public function test() 
+    public function test()
     {
         try {
             // $token = JWTAuth::getToken();
@@ -64,17 +64,6 @@ class AuthController extends Controller
         }
     }
 
-    public function user(Request $request)
-    {
-        $user = Auth::user();
-
-        if ($user) {
-            return response(['user' => $user], Response::HTTP_OK);
-        }
-
-        return response(null, Response::HTTP_BAD_REQUEST);
-    }
-
     /**
      * Log out
      * Invalidate the token, so user cannot use it anymore
@@ -82,19 +71,14 @@ class AuthController extends Controller
      *
      * @param Request $request
      */
-    public function logout(Request $request) {
-        $this->validate($request, ['token' => 'required']);
-        
+    public function logout(Request $request)
+    {
         try {
-            JWTAuth::invalidate($request->input('token'));
+            $token = JWTAuth::getToken();
+            JWTAuth::invalidate($token);
             return response()->json('You have successfully logged out.', Response::HTTP_OK);
         } catch (JWTException $e) {
             return response()->json('Failed to logout, please try again.', Response::HTTP_BAD_REQUEST);
         }
-    }
-
-    public function refresh()
-    {
-        return response(JWTAuth::getToken(), Response::HTTP_OK);
     }
 }

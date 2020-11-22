@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\RoleEnum;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,11 +46,12 @@ Route::group(['middleware' => ['admin']], function () {
 
     Route::apiResource('admin/property', 'Api\Admin\PropertyController');
 
-    Route::post('/test-token', 'AuthController@test');
 });
 
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
+Route::post('/logout', 'AuthController@logout')->middleware('verify.jwt');
+Route::post('/test', 'AuthController@test');
 
 Route::apiResource('client/brand', 'Api\Client\BrandController');
 

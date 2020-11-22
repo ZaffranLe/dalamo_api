@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\RoleEnum;
 
 use Closure;
 
@@ -16,8 +18,11 @@ class CheckRole
      * @return mixed
      */
     public function handle($request, Closure $next, $role)
-    {   
-        return response($role, Response::HTTP_OK);
-        return $next($request);
+    {
+        $user = $request->user;
+        if ($user->role == $role) {
+            return $next($request);
+        }
+        return response(['error' => 'Forbidden access', 'code' => 'FORBIDDEN_ACCESS'], Response::HTTP_FORBIDDEN);
     }
 }

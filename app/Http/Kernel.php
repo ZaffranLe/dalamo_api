@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http;
-
+use App\Models\RoleEnum;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
         
         'admin' => [
             'verify.jwt',
-            'check_role:1'
+            'check_role:'.RoleEnum::ADMIN
         ]
     ];
 
