@@ -74,6 +74,7 @@ class ProductController extends Controller
                     'folder' => 'dalamo'
                 ));
                 if($uploadFile->success !== NULL) {
+                    $imageUploaded = $uploadFile->success;
                     $image = new Image([
                         'idProduct' =>  $product->id,
                         'fileId' => $imageUploaded->fileId,
@@ -144,8 +145,6 @@ class ProductController extends Controller
                     ));
                     if($uploadFile->success !== NULL) {
                         $imageUploaded = $uploadFile->success;
-                        
-                    $imageUploaded = $uploadFile->success;
                         $image = new Image([
                             'idProduct' =>  $product->id,
                             'fileId' => $imageUploaded->fileId,
