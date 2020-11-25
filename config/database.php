@@ -45,12 +45,12 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('url'),
-            'host' => env('DB_HOST', 'db_host'),
-            'port' => env('DB_PORT', 'db_port'),
-            'database' => env('DB_DATABASE', 'db_name'),
-            'username' => env('DB_USERNAME', 'db_user'),
-            'password' => env('DB_PASSWORD', 'db_password'),
+            'url' => env('207.148.127.106:3306'),
+            'host' => env('DB_HOST', '207.148.127.106'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'dalamo'),
+            'username' => env('DB_USERNAME', 'cnpm'),
+            'password' => env('DB_PASSWORD', 'Cntt1_k58'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

@@ -10,11 +10,6 @@ use Carbon\Carbon as time;
 
 class CommentController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $comment = DB::table('comment')
@@ -26,22 +21,6 @@ class CommentController extends Controller
         return response()->json($comment);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $comment = new Comment([
@@ -57,12 +36,6 @@ class CommentController extends Controller
         return response()->json($comment);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $comment = DB::table('comment')
@@ -74,24 +47,6 @@ class CommentController extends Controller
         return response()->json($comment);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
@@ -104,13 +59,6 @@ class CommentController extends Controller
         $comment->save();
          return response()->json($comment);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $comment = Comment::find($id);

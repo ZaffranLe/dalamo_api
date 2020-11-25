@@ -10,11 +10,6 @@ use Carbon\Carbon as time;
 
 class OSController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $order_status = DB::table('order_status')
@@ -25,22 +20,6 @@ class OSController extends Controller
         return response()->json($order_status);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $order_status = new OS([
@@ -54,12 +33,6 @@ class OSController extends Controller
         return response()->json( $order_status);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $order_status = DB::table('order_status')
@@ -69,24 +42,6 @@ class OSController extends Controller
         return response()->json($order_status);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $order_status = OS::find($id);
@@ -98,13 +53,6 @@ class OSController extends Controller
         $order_status->save();
          return response()->json($order_status);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $order_status = OS::find($id);

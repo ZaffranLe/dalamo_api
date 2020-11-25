@@ -44,10 +44,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         
-        'admin' => [
-            'verify.jwt',
-            'check_role:'.RoleEnum::ADMIN
-        ]
+        // 'admin' => [
+        //     'verify.jwt',
+        //     'check_role:'.RoleEnum::ADMIN
+        // ]
+        'admin' => []
     ];
 
     /**

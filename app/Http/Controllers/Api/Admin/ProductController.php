@@ -5,216 +5,168 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
+use ImageKit\ImageKit;
+
 
 class ProductController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public $imageKit;
+
+    public function __construct() {
+        $this->imageKit = new ImageKit(
+            "public_imOmw/PdIbfdFSEGH5ix1+CRzH8=",
+            "private_i2838I8dlY6aeAoVmarAV48gh1I=",
+            "https://ik.imagekit.io/utcbot"
+        );
+    }
+
     public function index()
     {
-
-        $product = DB::table('product')
-                ->leftJoin('property','product.id','=','property.idProduct')
-                ->leftJoin('brand','brand.id','=','product.idBrand')
-                ->leftJoin('category','category.id','=','product.idCategory')
-                ->leftJoin('image','image.idProduct','=','product.id')
-                ->leftJoin('comment','comment.idProduct','=','product.id')
-                ->select('product.id','brand.name as brandName','product.name','product.price',
-                'product.description','product.characteristic','product.guide','product.ingredient',
-                'product.preservation','product.origin','product.storageQuantity',
-                'product.transportingQuantity','product.isDiscount','product.discountPercent',
-                'product.isHot','product.isNew','image.id as id_img','image.name as name_img',
-                'category.name as category_Name','property.id as id_property',
-                'property.name as name_property','property.value as value_property')
-                ->get();
-                $productList=[];
-                foreach ($product as $val) {
-                    if(isset($productList[$val->id])){
-                            //Ton tai
-                            $productList[$val->id]
-                            ['images'][] =[
-                                'id_img'=> $val->id_img,
-                                'name_img'=> $val->name_img
-                            ];
-                            $productList[$val->id]
-                            ['property'][] =[
-                                'id_property'=>$val->id_property,
-                                 'name_property'=>$val->name_property,
-                                'value_property'=>$val->value_property
-                            ];
-                        //     ['property'][]=[
-                        //         'id_property'=>$val->id_property,
-                        //         'name_property'=>$val->name_property,
-                        //         'value_property'=>$val->value_property
-                        // ];
-                            // $productList[]=$item;
-                    }else{
-                            //Chua ton tai
-                            $item = [
-                                'id'=> $val->id,
-                                'name'=>$val->name,
-                                'price'=>$val->price,
-                                'description'=>$val->description,
-                                'characteristic'=>$val->characteristic,
-                                'guide'=>$val->guide,
-                                'ingredient'=>$val->ingredient,
-                                'preservation'=>$val->preservation,
-                                'origin'=>$val->origin,
-                                'storageQuantity'=>$val->storageQuantity,
-                                'transportingQuantity'=>$val->transportingQuantity,
-                                'isDiscount'=>$val->isDiscount,
-                                'discountPercent'=>$val->discountPercent,
-                                'isHot'=>$val->isHot,
-                                'isNew'=>$val->isNew,
-                                'category_Name'=>$val->category_Name,
-                                'brandName'=>$val->brandName,
-                                'images'=> [
-                                    ['id_img'=> $val->id_img,
-                                    'name_img'=> $val->name_img]
-                                ],
-                                'property' => [
-                                    [
-                                    'id_property'=>$val->id_property,
-                                    'name_property'=>$val->name_property,
-                                    'value_property'=>$val->value_property]
-                                    ]
-                                ];
-                            $productList[$val->id] =$item;
-                    }
-                }
-
-            // foreach ($product as $val){
-
-            // $cate = DB::table('category')->where('category.id',)
-            // ->select('category.name as categoryName','category.slug as categorySlug','category.id as categoryId')
-            // ->get();
-            // }
-            // $val->category = $cate;
-
-        // $cate = DB::table('category')
-        //     ->select('category.name')
-        //     ->get();
-        // $result = [
-        //     'product' => [
-        //         $product,
-        //         $cate
-        //     ]
-        // ];
-
-
-        return response()->json(array_values($productList));
+        $products = DB::table('product')->get();
+        foreach($products as $product) {
+            $images = DB::table('image')->where('idProduct', '=', $product->id)->get();
+            $product->images = $images;
+        }
+        return response()->json($products);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        $data = json_decode($request->data);
+        $info = $data->info;
+
         $product = new Product([
-            'name' => $request->get('name'),
-            'idBrand' => $request->get('idBrand'),
-            'price' => $request->get('price'),
-            'description' => $request->get('description'),
-            'characteristic' => $request->get('characteristic'),
-            'guide' => $request->get('guide'),
-            'ingredient' => $request->get('ingredient'),
-            'preservation' => $request->get('preservation'),
-            'origin' => $request->get('origin'),
-            'storageQuantity' => $request->get('storageQuantity'),
-            'transportingQuantity' => $request->get('transportingQuantity'),
-            'isDiscount' => $request->get('isDiscount'),
-            'discountPercent' => $request->get('discountPercent'),
+            'name' => $info->name,
+            'slug' => $info->slug,
+            'description' => $info->description ?? null,
+            'characteristic' => $info->characteristic ?? null,
+            'guide' => $info->guide ?? null,
+            'ingredient' => $info->ingredient ?? null,
+            'preservation' => $info->preservation ?? null,
+            'origin' => $info->origin ?? null,
+            'price' => $info->price ?? null,
+            'isDiscount' => $info->isDiscount ?? 0,
+            'isHot' => $info->isHot ?? 0,
+            'isNew' => $info->isNew ?? 0,
+            'discountPercent' => $info->discountPercent ?? null,
+            'storageQuantity' => $info->storageQuantity ?? null,
+            'transportingQuantity' => $info->transportingQuantity ?? null,
+            'idBrand' => $info->idBrand ?? null,
+            'idCategory' => $info->idCategory ?? null,
+            'status' => $info->status ?? 1,
             'createdBy' => 1,
-            'createdDate' =>  time::now(),
-            'status' => $request->get('status'),
-            'isHot' => $request->get('isHot'),
-            'isNew' => $request->get('isNew'),
-            'idCategory' => $request->get('idCategory'),
+            'createdDate' => time::now(),
         ]);
+
         $product->save();
+
+        if ($request->hasFile('files')) {
+            $files =  $request->file('files');
+            $images = [];
+            foreach ($files as $file) {
+                $base64 = base64_encode(file_get_contents($file));
+                $uploadFile = $this->imageKit->upload(array(
+                    'file' => $base64,
+                    'fileName' => $file->getClientOriginalName(),
+                    'folder' => 'dalamo'
+                ));
+                if($uploadFile->success !== NULL) {
+                    $imageUploaded = $uploadFile->success;
+                    $image = new Image([
+                        'idProduct' =>  $product->id,
+                        'fileId' => $imageUploaded->fileId,
+                        'name' => $imageUploaded->name,
+                        'size' => $imageUploaded->size,
+                        'height' => $imageUploaded->height,
+                        'width' => $imageUploaded->width,
+                        'thumbnailUrl' => $imageUploaded->thumbnailUrl,
+                        'filePath' => $imageUploaded->filePath,
+                        'createdDate' => time::now(),
+                    ]);
+                    $image->save();
+                    array_push($images, $image);
+                }
+            }
+            $product->images = $images;
+        }
+
         return response()->json($product);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $product = Product::find($id);
         return response()->json($product);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        $data = json_decode($request->data);
+        $info = $data->info;
+
         $product = Product::find($id);
-        $product->name = $request->get('name');
-        $product->idBrand = $request->get('idBrand');
-        $product->price = $request->get('price');
-        $product->description = $request->get('description');
-        $product->characteristic = $request->get('characteristic');
-        $product->guide = $request->get('guide');
-        $product->ingredient = $request->get('ingredient');
-        $product->preservation = $request->get('preservation');
-        $product->origin = $request->get('origin');
-        $product->storageQuantity = $request->get('storageQuantity');
-        $product->transportingQuantity = $request->get('transportingQuantity');
-        $product->isDiscount = $request->get('isDiscount');
-        $product->discountPercent = $request->get('discountPercent');
+
+        $product->name = $info->name ?? $product->name;
+        $product->slug = $info->slug ?? $product->slug;
+        $product->description = $info->description ?? $product->description;
+        $product->characteristic = $info->characteristic ?? $product->characteristic;
+        $product->guide = $info->guide ?? $product->guide;
+        $product->ingredient = $info->ingredient ?? $product->ingredient;
+        $product->preservation = $info->preservation ?? $product->preservation;
+        $product->origin = $info->origin ?? $product->origin;
+        $product->price = $info->price ?? $product->price;
+        $product->isDiscount = $info->isDiscount ?? $product->isDiscount;
+        $product->isHot = $info->isHot ?? $product->isHot;
+        $product->isNew = $info->isNew ?? $product->isNew;
+        $product->discountPercent = $info->discountPercent ?? $product->discountPercent;
+        $product->storageQuantity = $info->storageQuantity ?? $product->storageQuantity;
+        $product->transportingQuantity = $info->transportingQuantity ?? $product->transportingQuantity;
+        $product->idBrand = $info->idBrand ?? $product->idBrand;
+        $product->idCategory = $info->idCategory ?? $product->o;
+        $product->status = $info->status ?? $product->status;
         $product->updatedBy =1;
         $product->updatedDate = time::now();
-        $product->status = $request->get('status');
-        $product->isHot = $request->get('isHot');
-        $product->isNew = $request->get('isNew');
-        $product->idCategory = $request->get('idCategory');
+
         $product->save();
+
+        if(property_exists($data, 'images')) {
+            if ($request->hasFile('files')) {
+                $files =  $request->file('files');
+                foreach ($files as $file) {
+                    $base64 = base64_encode(file_get_contents($file));
+                    $uploadFile = $this->imageKit->upload(array(
+                        'file' => $base64,
+                        'fileName' => $file->getClientOriginalName(),
+                        'folder' => 'dalamo'
+                    ));
+                    if($uploadFile->success !== NULL) {
+                        $imageUploaded = $uploadFile->success;
+                        $image = new Image([
+                            'idProduct' =>  $product->id,
+                            'fileId' => $imageUploaded->fileId,
+                            'name' => $imageUploaded->name,
+                            'size' => $imageUploaded->size,
+                            'height' => $imageUploaded->height,
+                            'width' => $imageUploaded->width,
+                            'thumbnailUrl' => $imageUploaded->thumbnailUrl,
+                            'filePath' => $imageUploaded->filePath,
+                            'createdDate' => time::now(),
+                        ]);
+                        $image->save();
+                    }
+                }
+            }
+            if(count($data->images->delete) > 0) {
+                Image::destroy($data->images->delete);
+            }
+        }
+        $images = DB::table('image')->where('idProduct', '=', $product->id)->get();
+        $product->images = $images;
         return response()->json($product);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $product = Product::find($id);
