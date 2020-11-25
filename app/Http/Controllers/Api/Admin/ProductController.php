@@ -70,11 +70,10 @@ class ProductController extends Controller
                 $base64 = base64_encode(file_get_contents($file));
                 $uploadFile = $this->imageKit->upload(array(
                     'file' => $base64,
-                    'fileName' => $file->getClientOriginalName(),
+                    'fileName' => time::now()->timestamp,
                     'folder' => 'dalamo'
                 ));
                 if($uploadFile->success !== NULL) {
-                    $imageUploaded = $uploadFile->success;
                     $image = new Image([
                         'idProduct' =>  $product->id,
                         'fileId' => $imageUploaded->fileId,
@@ -83,6 +82,7 @@ class ProductController extends Controller
                         'height' => $imageUploaded->height,
                         'width' => $imageUploaded->width,
                         'thumbnailUrl' => $imageUploaded->thumbnailUrl,
+                        'url' => $imageUploaded->url,
                         'filePath' => $imageUploaded->filePath,
                         'createdDate' => time::now(),
                     ]);
@@ -139,11 +139,13 @@ class ProductController extends Controller
                     $base64 = base64_encode(file_get_contents($file));
                     $uploadFile = $this->imageKit->upload(array(
                         'file' => $base64,
-                        'fileName' => $file->getClientOriginalName(),
+                        'fileName' => time::now()->timestamp,
                         'folder' => 'dalamo'
                     ));
                     if($uploadFile->success !== NULL) {
                         $imageUploaded = $uploadFile->success;
+                        
+                    $imageUploaded = $uploadFile->success;
                         $image = new Image([
                             'idProduct' =>  $product->id,
                             'fileId' => $imageUploaded->fileId,
@@ -153,6 +155,7 @@ class ProductController extends Controller
                             'width' => $imageUploaded->width,
                             'thumbnailUrl' => $imageUploaded->thumbnailUrl,
                             'filePath' => $imageUploaded->filePath,
+                            'url' => $imageUploaded->url,
                             'createdDate' => time::now(),
                         ]);
                         $image->save();
