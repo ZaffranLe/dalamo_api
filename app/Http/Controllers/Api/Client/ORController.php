@@ -11,7 +11,6 @@ use Carbon\Carbon as time;
 
 class ORController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('verify.jwt')->except('store');
@@ -22,9 +21,19 @@ class ORController extends Controller
         $user = $request->user;
         
         $order_receipt = DB::table('order_receipt')
-                ->leftJoin('order_status','order_status.id','=','order_receipt.idStatus')
-                ->select('order_receipt.id','order_receipt.totalPrice','order_status.name as statusName',
-                'order_receipt.name','order_receipt.phone','order_receipt.address','order_receipt.note', 'order_receipt.createdDate')
+                ->leftJoin('order_status', 'order_status.id', '=', 'order_receipt.idStatus')
+                ->select(
+                    'order_receipt.id',
+                    'order_receipt.totalPrice',
+                    'order_status.name as statusName',
+                    'order_status.description as statusDescription',
+                    'order_status.color as statusColor',
+                    'order_receipt.name',
+                    'order_receipt.phone',
+                    'order_receipt.address',
+                    'order_receipt.note',
+                    'order_receipt.createdDate'
+                )
                 ->where('order_receipt.idUser', '=', $user->id)
                 ->get();
         return response()->json($order_receipt);
@@ -33,7 +42,7 @@ class ORController extends Controller
     public function store(Request $request)
     {
         $order_receipt = new Order_receipt([
-        	'idStatus' => 1,
+            'idStatus' => 1,
             'name' => $request->get('name'),
             'phone' => $request->get('phone'),
             'address' => $request->get('address'),
@@ -82,7 +91,7 @@ class ORController extends Controller
         $order_receipt->idStatus = $request->get('idStatus');
         $order_receipt->totalPrice = $request->get('totalPrice');
         $order_receipt->save();
-         return response()->json($order_receipt);
+        return response()->json($order_receipt);
     }
     public function destroy($id)
     {
