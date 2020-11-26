@@ -65,7 +65,7 @@ Route::apiResource('client/detail-order', 'Api\Client\DOController');
 
 Route::apiResource('client/import-product', 'Api\Client\IPController');
 
-Route::apiResource('client/order-receipt', 'Api\Client\ORController')->middleware('verify.jwt');
+Route::apiResource('client/order-receipt', 'Api\Client\ORController');
 
 Route::apiResource('client/order-status', 'Api\Client\OSController');
 

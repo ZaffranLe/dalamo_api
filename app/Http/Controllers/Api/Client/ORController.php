@@ -11,6 +11,12 @@ use Carbon\Carbon as time;
 
 class ORController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('verify.jwt')->except('store');
+    }
+
     public function index(Request $request)
     {
         $user = $request->user;

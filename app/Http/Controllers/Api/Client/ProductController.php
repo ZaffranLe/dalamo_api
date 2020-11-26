@@ -201,6 +201,7 @@ class ProductController extends Controller
             $comments = DB::table('comment')->leftJoin('user', 'user.id', '=', 'comment.idUser')->select(
                 'user.fullName',
                 'user.status as userStatus',
+                'user.id as idUser',
                 'comment.content',
                 'comment.rate',
                 'comment.status',
