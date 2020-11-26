@@ -12,12 +12,11 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = DB::table('user')
-                ->leftJoin('role','role.id','=','user.idRole')
-                ->select('user.id','user.fullName','user.idRole','role.name as roleName','user.email','user.phone','user.address')
-                ->where('user.status','=' ,1)
+        $users = DB::table('user')
                 ->get();
-        return response()->json($user);
+        foreach($users as $user)
+            unset($user->password);
+        return response()->json($users);
     }
 
     public function store(Request $request)
@@ -27,9 +26,9 @@ class UserController extends Controller
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
             'address' => $request->get('address'),
-            'password' => $request->get('password'),
+            'password' => md5($request->get('password')),
             'idRole' => $request->get('idRole'),
-            'createdBy' =>1,
+            'createdBy' => 1,
             'createdDate' =>time::now(),
             'status' => $request->get('status')
         ]);
@@ -49,12 +48,14 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $user = User::find($id);
+        // $out->writeln($request->password ? 1 : 2);
      	$user->fullName = $request->get('fullName');
         $user->email = $request->get('email');
         $user->phone = $request->get('phone');
         $user->address = $request->get('address');
-        $user->password = $request->get('password');
+        $user->password = md5($request->get('password')) ?? $user->password;
         $user->idRole = $request->get('idRole');
         $user->updatedBy = 1;
         $user->updatedDate = time::now();

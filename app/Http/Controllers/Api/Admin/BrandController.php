@@ -19,11 +19,11 @@ class BrandController extends Controller
     {
         $brand = new Brand([
             'name' => $request->get('name'),
+            'slug' => $request->get('slug'),
             'imagrUrl' => $request->get('imagrUrl'),
             'createdBy' => 1,
             'createdDate' =>  time::now(),
             'status' => $request->get('status'),
-            'slug' => $request->get('slug'),
         ]);
         $brand->save();
         return response()->json($brand);
@@ -39,11 +39,11 @@ class BrandController extends Controller
     {
         $brand = Brand::find($id);
         $brand->name = $request->get('name');
+        $brand->slug = $request->get('slug');
         $brand->imagrUrl = $request->get('imagrUrl');
-        $brand->updatedBy =1;
+        $brand->updatedBy = 1;
         $brand->updatedDate = time::now();
         $brand->status = $request->get('status');
-        $brand->slug = $request->get('slug');
         $brand->save();
          return response()->json($brand);
     }
