@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -28,7 +29,7 @@ class CategoryController extends Controller
             'createdDate' =>  time::now()
         ]);
         $category->save();
-        return response()->json($category);
+        return response($category, Response::HTTP_CREATED);
     }
 
     public function show($id)

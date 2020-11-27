@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Provider;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -31,7 +32,7 @@ class ProviderController extends Controller
             'status' => $request->get('status')
         ]);
         $provider->save();
-        return response()->json($provider);
+        return response($provider, Response::HTTP_CREATED);
     }
 
     public function show($id)

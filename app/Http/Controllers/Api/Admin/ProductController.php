@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Product;
 use App\Models\Image;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +95,7 @@ class ProductController extends Controller
             $product->images = $images;
         }
 
-        return response()->json($product);
+        return response($product, Response::HTTP_CREATED);
     }
 
     public function show($id)

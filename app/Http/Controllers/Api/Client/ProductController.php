@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -49,7 +50,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $products = DB::table('product')
+        $product = DB::table('product')
                 ->leftJoin('brand', 'brand.id', '=', 'product.idBrand')
                 ->leftJoin('category', 'category.id', '=', 'product.idCategory')
                 ->select(
@@ -75,10 +76,9 @@ class ProductController extends Controller
                     'category.id as idCategory'
                 )
                 ->where('product.id', '=', $id)
-                ->get();
+                ->get()->first();
 
-        if (count($products) > 0) {
-            $product = $products[0];
+        if ($product) {
             
             $images = DB::table('image')->where('idProduct', '=', $id)->get();
             $product->images = $images;
@@ -100,6 +100,6 @@ class ProductController extends Controller
             return response()->json($product);
         }
 
-        return response(404);
+        return response(Response::HTTP_NOT_FOUND);
     }
 }

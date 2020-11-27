@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -33,7 +34,7 @@ class UserController extends Controller
             'status' => $request->get('status')
         ]);
         $user->save();
-        return response()->json($user);
+        return response($user, Response::HTTP_CREATED);
     }
 
     public function show($id)

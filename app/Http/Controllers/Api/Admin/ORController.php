@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Order_receipt;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -38,7 +39,7 @@ class ORController extends Controller
             'totalPrice' => $request->get('totalPrice')
         ]);
         $order_receipt->save();
-        return response()->json($order_receipt);
+        return response($order_receipt, Response::HTTP_CREATED);
     }
 
     public function show($id)

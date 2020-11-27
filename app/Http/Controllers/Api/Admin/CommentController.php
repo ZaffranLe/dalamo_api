@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -33,7 +34,7 @@ class CommentController extends Controller
             'idProduct' => $request->get('idProduct')
         ]);
         $comment->save();
-        return response()->json($comment);
+        return response($comment, Response::HTTP_CREATED);
     }
 
     public function show($id)

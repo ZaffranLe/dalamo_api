@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\OS;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon as time;
@@ -29,7 +30,7 @@ class OSController extends Controller
             'createdDate' =>time::now()
         ]);
         $order_status->save();
-        return response()->json( $order_status);
+        return response($order_status, Response::HTTP_CREATED);
     }
 
     public function show($id)

@@ -69,7 +69,7 @@ class ORController extends Controller
 
         $order_receipt->products = $detail_order;
 
-        return response()->json($order_receipt);
+        return response($order_receipt, Response::HTTP_CREATED);
     }
 
     public function show(Request $request, $id)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Brand;
 use Carbon\Carbon as time;
 
@@ -26,7 +27,7 @@ class BrandController extends Controller
             'status' => $request->get('status'),
         ]);
         $brand->save();
-        return response()->json($brand);
+        return response($brand, Response::HTTP_CREATED);
     }
 
     public function show($id)
