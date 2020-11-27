@@ -113,26 +113,4 @@ class ORController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        $order_receipt = Order_receipt::find($id);
-        $order_receipt->idStatus = $request->get('idStatus');
-        $order_receipt->name = $request->get('name');
-        $order_receipt->phone = $request->get('phone');
-        $order_receipt->address = $request->get('address');
-        $order_receipt->note = $request->get('note');
-        $order_receipt->idUser = $request->get('idUser');
-        $order_receipt->updatedBy = 1;
-        $order_receipt->updatedDate = time::now();
-        $order_receipt->idStatus = $request->get('idStatus');
-        $order_receipt->totalPrice = $request->get('totalPrice');
-        $order_receipt->save();
-        return response()->json($order_receipt);
-    }
-    public function destroy($id)
-    {
-        $order_receipt = Order_receipt::find($id);
-        $order_receipt->delete();
-        return response()->json($order_receipt);
-    }
 }

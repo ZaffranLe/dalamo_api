@@ -42,7 +42,6 @@ Route::group(['middleware' => ['admin']], function () {
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout')->middleware('verify.jwt');
-Route::post('/test', 'AuthController@test');
 
 Route::apiResource('client/brand', 'Api\Client\BrandController');
 
@@ -50,24 +49,8 @@ Route::apiResource('client/category', 'Api\Client\CategoryController');
 
 Route::apiResource('client/comment', 'Api\Client\CommentController');
 
-Route::apiResource('client/detail-import-product', 'Api\Client\DIPController');
-
-Route::apiResource('client/detail-order', 'Api\Client\DOController');
-
-Route::apiResource('client/import-product', 'Api\Client\IPController');
-
 Route::apiResource('client/order-receipt', 'Api\Client\ORController');
-
-Route::apiResource('client/order-status', 'Api\Client\OSController');
 
 Route::apiResource('client/product', 'Api\Client\ProductController');
 
-Route::apiResource('client/provider', 'Api\Client\ProviderController');
-
-Route::apiResource('client/role', 'Api\Client\RoleController');
-
 Route::apiResource('client/user', 'Api\Client\UserController');
-
-Route::apiResource('client/image', 'Api\Client\ImageController');
-
-Route::apiResource('client/property', 'Api\Client\PropertyController');

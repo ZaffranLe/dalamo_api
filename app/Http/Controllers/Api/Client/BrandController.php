@@ -15,44 +15,4 @@ class BrandController extends Controller
         return response()->json($brand);
     }
 
-    public function store(Request $request)
-    {
-        $brand = new Brand([
-            'name' => $request->get('name'),
-            'imagrUrl' => $request->get('imagrUrl'),
-            'createdBy' => 1,
-            'createdDate' =>  time::now(),
-            'status' => $request->get('status'),
-            'slug' => $request->get('slug'),
-        ]);
-        $brand->save();
-        return response()->json($brand);
-    }
-
-    public function show($id)
-    {
-        $brand = Brand::find($id);
-        return response()->json($brand);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $brand = Brand::find($id);
-        $brand->name = $request->get('name');
-        $brand->imagrUrl = $request->get('imagrUrl');
-        $brand->updatedBy =1;
-        $brand->updatedDate = time::now();
-        $brand->status = $request->get('status');
-        $brand->slug = $request->get('slug');
-        $brand->save();
-         return response()->json($brand);
-    }
-    public function destroy($id)
-    {
-        $brand = Brand::find($id);
-        $brand->delete();
-        return response()->json($brand);
-
-        //test
-    }
 }
