@@ -26,7 +26,7 @@ class AuthController extends Controller
         $user->phone = "";
         $user->save();
 
-        return response()->json($user, 201);
+        return response($user, Response::HTTP_CREATED);
     }
 
     public function login(Request $request)
@@ -65,21 +65,6 @@ class AuthController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
         return response()->json(['token' => $token], Response::HTTP_OK);
-    }
-
-    public function test()
-    {
-        try {
-            // $token = JWTAuth::getToken();
-            // $user = JWTAuth::getPayload($token);
-
-            // if ($user) {
-            //     return response(['user' => $user], Response::HTTP_OK);
-            // }
-            return response(null, Response::HTTP_BAD_REQUEST);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
     }
 
     /**
