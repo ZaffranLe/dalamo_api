@@ -18,6 +18,8 @@ use App\Models\RoleEnum;
 Route::middleware('auth:api');
 
 Route::group(['middleware' => ['admin']], function () {
+    Route::apiResource('admin/dashboard', 'Api\Admin\DashboardController');
+
     Route::apiResource('admin/brand', 'Api\Admin\BrandController');
 
     Route::apiResource('admin/category', 'Api\Admin\CategoryController');
