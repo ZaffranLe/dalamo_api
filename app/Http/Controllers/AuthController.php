@@ -38,12 +38,13 @@ class AuthController extends Controller
             ['email', '=', $email],
             ['password', '=', $password]
         ]);
-        $role = Role::find($user->idRole);
-        $user->role = $role->name;
-
+        
         if (!$user) {
             return response(['error' => 'Sai email hoặc mật khẩu.'], Response::HTTP_BAD_REQUEST);
         }
+        
+        $role = Role::find($user->idRole);
+        $user->role = $role->name;
 
         $customClaims = [
             'exp' => time::now()->addDays(7)->timestamp,
